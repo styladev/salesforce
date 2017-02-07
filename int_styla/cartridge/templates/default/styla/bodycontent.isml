@@ -1,0 +1,31 @@
+<!--- TEMPLATENAME: bodycontent.isml --->
+<iscomment>
+	Output the container DIV for the Styla magazine.
+</iscomment>
+
+
+<iscache type="relative" minute="${pdict.MagazineConfiguration.seoCachingTTL}">
+
+
+<!--- Debug info (not visible on production) --->
+<isif condition="${require('dw/system/System').instanceType !== require('dw/system/System').PRODUCTION_SYSTEM}">
+	<!--
+	// debug info (not visible on production):
+	pdict.MagazineConfiguration = <isprint value="${JSON.stringify(pdict.MagazineConfiguration, null, '\t')}" encoding="off" />;	
+	-->
+</isif>
+
+
+<!--- Styla Magazine container --->
+<div id="stylaMagazine" 	
+	<isif condition="${!empty(pdict.MagazineConfiguration.rootPath)}">
+		data-rootpath="${pdict.MagazineConfiguration.rootPath}"
+	</isif>
+>
+</div>
+
+
+<!--- Styla SEO content for body --->
+<isif condition="${!pdict.MagazineConfiguration.seoDisabled}">
+	<isprint value="${pdict.Response.html.body}" encoding="off"/>
+</isif>

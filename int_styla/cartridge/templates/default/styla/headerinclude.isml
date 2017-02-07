@@ -1,0 +1,7 @@
+<!--- TEMPLATENAME: headerinclude.isml --->
+<iscomment>
+	Output the SEO content (TITLE and META tags) for the Styla magazine.
+	Include Styla JS and CSS. 
+ </iscomment>
+ 
+ <isinclude url="${URLUtils.url('StylaMagazine-HeaderContent', 'magazinepath', pdict.OriginalURL || pdict.CurrentRequest.httpHeaders['x-is-path_info'], 'querystring', pdict.CurrentRequest.httpQueryString, 'getcontentver', 'true')}"/>

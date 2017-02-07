@@ -1,0 +1,14 @@
+<!--- TEMPLATENAME: bodyinclude.isml --->
+<iscomment>
+	Output the container DIV for the Styla magazine.
+	Set HTTP response status as returned by Styla SEO API.
+</iscomment>
+
+
+<isscript>
+	var StylaMagazine = require('int_styla/cartridge/controllers/StylaMagazine');
+	StylaMagazine.SetHttpStatus();
+</isscript>
+
+ 
+<isinclude url="${URLUtils.url('StylaMagazine-BodyContent', 'magazinepath', pdict.OriginalURL || pdict.CurrentRequest.httpHeaders['x-is-path_info'], 'querystring', pdict.CurrentRequest.httpQueryString, 'getcontentver', 'false')}"/>

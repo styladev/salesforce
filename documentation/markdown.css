@@ -1,0 +1,194 @@
+body:before {
+  content: "LINK Cartridge Integration";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background-color: white;
+  padding: 0.5em;
+}
+
+/** table of contents defaults **/
+body>ol:first-child, body>ol:first-child ol { list-style-type: none; }
+body>ol:first-child {
+  margin-top: 2em;
+  padding-top: 2em;
+  counter-reset: h2;
+}
+body>ol:first-child>li {
+  counter-increment: lia;
+  counter-reset: lib;
+}
+body>ol:first-child li:before {
+  padding-right: .5em;
+  content: counter(lia) ".";
+}
+
+body>ol:first-child>li>ol>li {
+    counter-increment: lib;
+}
+body>ol:first-child>li>ol>li:before {
+  content: counter(lia) "." counter(lib) "."
+}
+
+body{
+    margin: 0 auto;
+    font-family: Georgia, Palatino, serif;
+    color: #444444;
+    line-height: 1;
+    max-width: 960px;
+    padding: 30px;
+    font-size: 99%;
+
+    counter-reset: h2;
+}
+
+/** headline numbering **/
+h2 { counter-increment: h2; counter-reset: h3; }
+h2:before { padding-right: .5em; content: counter(h2); }
+h3 { counter-increment: h3; counter-reset: h4; }
+h3:before { padding-right: .5em; content: counter(h2) "." counter(h3); }
+h4 { counter-increment: h4; counter-reset: h5; }
+h4:before { padding-right: .5em; content: counter(h2) "." counter(h3) "." counter(h4); }
+
+/** table of contents headline **/
+body>h1+h4+h2 { padding-bottom: 1em; }
+h1+h4+h2+ol { counter-reset: h2; }
+body>h1+h4+h2:before { content: ""; padding-right: 0em; }
+
+/** default vaules for all other headlines **/
+h1, h2, h3, h4 {
+    color: #111111;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, p {
+    margin-bottom: 24px;
+    padding: 0;
+}
+h1 {
+    font-size: 48px;
+    margin-top: 5em;
+    text-align: right;
+}
+h1 + h4 {
+  text-align: right;
+}
+h1 + h4:before { content: ""; }
+
+h2 {
+    page-break-before: always;
+    font-size: 30px;
+    /* The bottom margin is small. It's designed to be used with gray meta text
+     * below a post title. */
+    margin: 24px 0 6px;
+    padding-top: 1em;
+}
+h3 {
+    font-size: 24px;
+}
+h4 {
+    font-size: 21px;
+}
+h5 {
+    font-size: 18px;
+}
+a {
+    color: #0099ff;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+a:hover {
+    text-decoration: none;
+    color: #ff6600;
+}
+a:visited {
+    color: purple;
+}
+ul, ol {
+    padding: 0;
+    margin: 0;
+    padding-left: 20px;
+}
+li {
+    line-height: 1.56em;
+}
+li ul, li ul {
+    margin-left: 24px;
+}
+p, ul, ol {
+    font-size: 14px;
+    line-height: 1.56em;
+    max-width: 700px;
+}
+pre {
+    padding: 0px 24px;
+    max-width: 800px;
+    white-space: pre-wrap;
+    border: 1px solid #ccc;
+    background: #efefef;
+    border-radius: 5px;
+}
+code {
+    font-family: 'Meslo LG M DZ', 'Source Code Pro', Consolas, Monaco, Andale Mono, monospace;
+    line-height: 1.5em;
+    font-size: 13px;
+    white-space: pre;
+    background: #efefef;
+    border-radius: 3px;
+}
+aside {
+    display: block;
+    float: right;
+    width: 390px;
+}
+blockquote {
+    border-left:.5em solid #eee;
+    padding: 0 2em;
+    margin-left:0;
+    max-width: 476px;
+}
+blockquote  cite {
+    font-size:14px;
+    line-height:20px;
+    color:#bfbfbf;
+}
+blockquote cite:before {
+    content: '\2014 \00A0';
+}
+
+blockquote p {
+    color: #666;
+    max-width: 460px;
+}
+hr {
+    width: 540px;
+    text-align: left;
+    margin: 0 auto 0 0;
+    color: #999;
+}
+img {
+    max-width: 100%;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+td, th {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  margin: 0;
+  font-size: 0.7em;
+}
+
+th { border-bottom: 3pt double #ccc; text-align: left; }
+
+table, th, td {
+  border-left: none;
+  border-right: none;
+}
