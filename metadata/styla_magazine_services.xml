@@ -3,13 +3,11 @@
     <service-credential service-credential-id="StylaSeoContentCredentials">
         <url>http://seo.styla.com/clients/</url>
         <user-id/>
-        <password masked="true">********</password>
     </service-credential>
 
     <service-credential service-credential-id="StylaVersionCredentials">
         <url>live.styla.com/api/version/</url>
         <user-id/>
-        <password masked="true">********</password>
     </service-credential>
 
     <service-profile service-profile-id="StylaSeoContentProfile">
@@ -35,7 +33,7 @@
     <service service-id="StylaSeoContentHttpService">
         <service-type>HTTP</service-type>
         <enabled>true</enabled>
-        <log-prefix/>
+        <log-prefix>styla</log-prefix>
         <comm-log-enabled>false</comm-log-enabled>
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>StylaSeoContentProfile</profile-id>
@@ -45,7 +43,7 @@
     <service service-id="StylaVersionService">
         <service-type>HTTP</service-type>
         <enabled>true</enabled>
-        <log-prefix/>
+        <log-prefix>styla</log-prefix>
         <comm-log-enabled>false</comm-log-enabled>
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>StylaVersionProfile</profile-id>

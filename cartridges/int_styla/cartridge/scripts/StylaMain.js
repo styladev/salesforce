@@ -7,17 +7,15 @@
  */
 
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-var Logger = require('dw/system/Logger');
+var Logger = require('dw/system/Logger').getLogger('styla', 'StylaMain');
 var ServiceRegistry = require('dw/svc/ServiceRegistry');
 var Site = require('dw/system/Site');
 
-var app = require('app_storefront_controllers/cartridge/scripts/app');
-var guard = require('app_storefront_controllers/cartridge/scripts/guard');
+var CONFIG_CO_TYPE        = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations
+var CONFIG_CO_KEY_ATTR    = 'Key_and_Sort_Order';         // name of the custom object's key attribute
+var CONFIG_CO_SORT_ORRDER = 'custom.' + CONFIG_CO_KEY_ATTR + ' asc'; // sort order of custom objects
 
-const CONFIG_CO_TYPE        = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations
-const CONFIG_CO_KEY_ATTR    = 'Key_and_Sort_Order';         // name of the custom object's key attribute
-const CONFIG_CO_SORT_ORRDER = 'custom.' + CONFIG_CO_KEY_ATTR + ' asc'; // sort order of custom objects
-
+var STYLA_ENABLED = Site.current.getCustomPreferenceValue('stylaEnabled') == true;
 
 
 /**
@@ -27,10 +25,18 @@ const CONFIG_CO_SORT_ORRDER = 'custom.' + CONFIG_CO_KEY_ATTR + ' asc'; // sort o
  * @returns The service call response.
  */
 function getSeoContent(config) {
-	var response,
+	var response = { error: true },
 		locale = request.locale;
+
 	// strip base path from current path to obtain the magazine sub path only
-	var magazinePath = config['path'].replace(new RegExp('.*' + config['basePath']), '');
+	var magazinePath = config['path'];
+	var idx = magazinePath.indexOf(config['basePath']);
+	if (idx > -1) {
+		magazinePath = magazinePath.substring(idx + config['basePath'].length);
+	}
+	else {
+		Logger.error('getSeoContent: config.basePath not found in config.path; config = ' + JSON.stringify(config));
+	} 
 	if (empty(magazinePath)) {
 		magazinePath = '/';
 	}
@@ -64,7 +70,7 @@ function getSeoContent(config) {
 	var result = svc.call();
 
 	// check result	
-	if (result && result.isOk() && result.object && !result.object.errorMessage) {
+	if (result && result.isOk() && result.object && !result.object.errorMessage && typeof result.object.html != 'undefined') {
 		response = result.object;
 	} else {
 		if (result.errorMessage) {
@@ -72,7 +78,9 @@ function getSeoContent(config) {
 		} else if (result.object && result.object.errorMessage) {
 			Logger.error(result.object.errorMessage);
 		}
-		response = { error: true };
+		else {
+			Logger.error('Invalid response from SEO service: ' + JSON.stringify(result.object));
+		}
 	}
 	
 	// Debug: set status here to test if alias() sets it on the HTTP response object 
@@ -275,136 +283,57 @@ function getMagazineConfiguration(path, getContentVer) {
 
 
 /**
- * Inject Styla JavaScript library and SEO content into page header or body.  
+ * Find a matching magazine configuration.
  * 
- * @param templateName Name of template to render.
+ * @param {string} path Original URL before redirect.
+ * @returns {Object} Magazine configuration if a matching magazine configuration was found, else returns null.
  */
-function renderContent(templateName) {
-	var magazineConfig,
+function getConfigForAlias(path) {
+	var result = null,
+		getContentVer = false, // skip request for content version, we only need SEO request to determine HTTP status code
+		magazineConfig;
+	
+	if (STYLA_ENABLED) {
+		magazineConfig = getMagazineConfiguration(path, getContentVer);
+		if (magazineConfig.valid) {
+			result = magazineConfig;
+		}
+	}
+	
+	return result;
+}
+
+
+
+/**
+ * Get the Styla content to be injected into the page's header and body.   
+ */
+function getRenderContent() {
+	var result = null,
+		magazineConfig,
 		seoResponse = null,
+		
+		magazinePath,
+		queryString,
+		getContentVer;
+	
+	if (STYLA_ENABLED) {
 		// read parameters that were passed via remote-include
-		magazinePath  = request.httpParameterMap.magazinepath.submitted  && request.httpParameterMap.magazinepath.stringValue || null,
-		queryString   = request.httpParameterMap.querystring.submitted   && request.httpParameterMap.querystring.stringValue  || null,
+		magazinePath  = request.httpParameterMap.magazinepath.submitted  && request.httpParameterMap.magazinepath.stringValue || null;
+		queryString   = request.httpParameterMap.querystring.submitted   && request.httpParameterMap.querystring.stringValue  || null;
 		getContentVer = request.httpParameterMap.getcontentver.submitted && request.httpParameterMap.getcontentver.stringValue === 'true';
 		
-	if (!empty(magazinePath) && magazinePath.indexOf('?') < 0 && !empty(queryString)) {
-		magazinePath += '?' + queryString;
-	}
-	
-	magazineConfig = getMagazineConfiguration(magazinePath, getContentVer);
-	if (magazineConfig['valid']) {
-		// found a magazine configuration that matches the original request's path 
-		app.getView({
-			MagazineConfiguration: magazineConfig,
-			Response: magazineConfig.seoResponse || null
-		}).render(templateName);
-	}
-	else {
-		app.getView().render('styla/empty');
-	}	
-}
-
-
-/**
- * Inject Styla JavaScript library and SEO content into page header. Use as remote include.
- */
-function headerContent() {
-	renderContent('styla/headercontent');
-}
-
-
-/**
- * Inject Styla JavaScript library and SEO content into page body. Use as remote include.
- */
-function bodyContent() {
-	renderContent('styla/bodycontent');
-}
-
-
-/**
- * Render the Styla cartridge version.
- */
-function cartridgeVersion() {
-	let version = require('~/package.json').cartridgeVersion;
-	let json = JSON.stringify({
-			'version': version
-		});
-
-	// cache for one day
-	let expiresDate = new Date();
-	expiresDate.setDate(expiresDate.getDate() + 1);
-	
-    response.setContentType('application/json');
-    response.setExpires(expiresDate);
-    response.writer.print(json);
-}
-
-
-/**
- * If the current URL is part of a magazine, then jump to the corresponding 
- * controller method so that the original URL is preserved in the browser.
- * 
- * This is called from RedirectURL.start() if no matching redirect rule was found.
- * 
- * E.g. assume we have an alias 'magazine' assigned to a pipeline which renders a Styla magazine.
- * When interacting with the magazine the Styla JavaScript will modify the URL in the 
- * customer's browser to e.g. 'magazine/stories/5'.
- * Because RedirectUrl.start() doesn't find a matching rule for 'magazine/stories/5' 
- * it calls this function.    
- * 
- * @param path Original URL before redirect.
- * @returns True, if a matching magazine configuration was found and the configured 
- * controller method was called successfully.
- */
-function alias(path) {
-	var result = false,
-		getContentVer = false, // skip request for content version, we only need SEO request to determine HTTP status code
-		magazineConfig = getMagazineConfiguration(path, getContentVer),
-		parts;
-	
-	if (magazineConfig.valid) {
-		// read controller method method from configuration
-		parts = magazineConfig.pipeline.split('-');
-		if (parts.length === 3) {
-			var controllerCartridge = parts[0],
-				controllerName = parts[1],
-				controllerMethod = parts[2],
-				controllerPath = controllerCartridge + '/cartridge/controllers/' + controllerName,
-				controller;
-			controller = require(controllerPath);
-			if (typeof controller[controllerMethod] === 'function') {
-				// store category ID in case the controller method is Search.show(),
-				// and header template uses this to set HTTP status
-				request.custom.MagazineConfiguration = magazineConfig;
-				// call controller method
-				controller[controllerMethod]();
-				result = true;
-				
-				
-				//TODO
-				// -> move to template
-				
-				// set HTTP status, if returned from SEO API
-				if (magazineConfig.seoResponse && !empty(magazineConfig.seoResponse.status)) {
-					response.setStatus(magazineConfig.seoResponse.status);
-				}
-				
-				
-				
-			}
-			else {
-				Logger.error('method not found or not a function: ' + magazineConfig.pipeline);
-			}
+		if (!empty(magazinePath) && magazinePath.indexOf('?') < 0 && !empty(queryString)) {
+			magazinePath += '?' + queryString;
 		}
-		else {
-			var pip = magazineConfig.pipeline;
-			if (typeof magazineConfig.pipeline === 'undefined') {
-				pip = '(undefined)';
-			}
-			else if (magazineConfig.pipeline === null) {
-				pip = '(null)';
-			}
-			Logger.error('invalid controller method specified: "{0}"', pip);
+		
+		magazineConfig = getMagazineConfiguration(magazinePath, getContentVer);
+		if (magazineConfig['valid']) {
+			// found a magazine configuration that matches the original request's path 
+			result = {
+				MagazineConfiguration: magazineConfig,
+				SeoResponse: magazineConfig.seoResponse || null
+			};
 		}
 	}
 	
@@ -425,20 +354,22 @@ function setHttpStatus() {
 		getContentVer = false, // skip request for content version, we only need SEO request to determine HTTP status code
 		path, status;
 	
-	if (cfg === null) {
-		// get original request path (before it was converted from alias to endpoint)
-		path = headers.get('x-is-path_info');
-		if (!empty(headers.get('x-is-query_string'))) {
-			path += '?' + headers.get('x-is-query_string');
+	if (STYLA_ENABLED) {
+		if (cfg === null) {
+			// get original request path (before it was converted from alias to endpoint)
+			path = headers.get('x-is-path_info');
+			if (!empty(headers.get('x-is-query_string'))) {
+				path += '?' + headers.get('x-is-query_string');
+			}
+			
+			cfg = getMagazineConfiguration(path, getContentVer);
+			req.custom.MagazineConfiguration = cfg;
 		}
 		
-		cfg = getMagazineConfiguration(path, getContentVer);
-		req.custom.MagazineConfiguration = cfg;
-	}
-	
-	status = cfg && cfg.seoResponse && cfg.seoResponse.status || null;
-	if (status !== null) {
-		response.setStatus(status);
+		status = cfg && cfg.seoResponse && cfg.seoResponse.status || null;
+		if (status !== null) {
+			response.setStatus(status);
+		}
 	}
 }
 
@@ -448,26 +379,18 @@ function setHttpStatus() {
  * Module exports
  */
 
-/*
- * Web exposed methods
- */
-/** Renders Styla header fragment.
- * @see module:controllers/StylaMagazine~headerContent */
-exports.HeaderContent = guard.ensure([], headerContent);
-/** Renders Styla body fragment.
- * @see module:controllers/StylaMagazine~bodyContent */
-exports.BodyContent = guard.ensure([], bodyContent);
-/** Renders Styla cartridge version.
- * @see module:controllers/StylaMagazine~cartridgeVersion */
-exports.CartridgeVersion = guard.ensure([], cartridgeVersion);
+/** Retrieve the content version to be appended to a magazine URL.
+ * @see module:controllers/StylaMain~getContentVersion */
+exports.GetContentVersion = getContentVersion;
 
-/*
- * Local methods
- */
-/** Redirect logic.
- * @see module:controllers/StylaMagazine~alias */
-exports.Alias = alias;
+/** Find magazine configuration matching the given path.
+ * @see module:controllers/StylaMain~getConfigForAlias */
+exports.GetConfigForAlias = getConfigForAlias;
+
+/** Return Styla fragment for rendering.
+ * @see module:controllers/StylaMain~headerContent */
+exports.GetRenderContent = getRenderContent;
+
 /** Set HTTP status from SEO API response.
- * @see module:controllers/StylaMagazine~setHttpStatus */
+ * @see module:controllers/StylaMain~setHttpStatus */
 exports.SetHttpStatus = setHttpStatus;
-

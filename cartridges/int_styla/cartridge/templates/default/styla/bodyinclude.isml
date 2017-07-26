@@ -1,0 +1,16 @@
+<!--- TEMPLATENAME: bodyinclude.isml --->
+<iscomment>
+	Output the container DIV for the Styla magazine.
+	Set HTTP response status as returned by Styla SEO API.
+</iscomment>
+
+<isif condition="${dw.system.Site.current.getCustomPreferenceValue('stylaEnabled') == true}">
+
+	<isscript>
+		var StylaMain = require('/int_styla/cartridge/scripts/StylaMain');
+		StylaMain.SetHttpStatus();
+	</isscript>
+	 
+	<isinclude url="${URLUtils.url('StylaMagazine-BodyContent', 'magazinepath', request.httpHeaders['x-is-path_info'], 'querystring', request.httpQueryString, 'getcontentver', 'false')}"/>
+
+</isif>

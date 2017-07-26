@@ -1,7 +1,0 @@
-{
-	"init": [
-		"./cartridge/scripts/init/StylaServiceInit.ds"
-	],
-	
-	"cartridgeVersion": "16.1.1"
-}

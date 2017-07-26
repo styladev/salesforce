@@ -9,10 +9,18 @@
 
 <!--- Debug info (not visible on production) --->
 <isif condition="${require('dw/system/System').instanceType !== require('dw/system/System').PRODUCTION_SYSTEM}">
-	<!--
-	// debug info (not visible on production):
-	pdict.MagazineConfiguration = <isprint value="${JSON.stringify(pdict.MagazineConfiguration, null, '\t')}" encoding="off" />;	
-	-->
+	<!--- uncomment the following block to debug SEO content --->
+	<iscomment>
+		<div id="debug-styla-magazine-cfg" style="display: none;">
+		<!-- 
+		// debug info (not visible on production):
+		pdict.MagazineConfiguration = <isprint value="${JSON.stringify(pdict.MagazineConfiguration, null, '\t')}" encoding="off" />;
+		-->	
+		</div>
+		<script>
+			//console.log(document.getElementById('debug-styla-magazine-cfg').innerHTML);
+		</script>
+	</iscomment>
 </isif>
 
 
@@ -27,5 +35,5 @@
 
 <!--- Styla SEO content for body --->
 <isif condition="${!pdict.MagazineConfiguration.seoDisabled}">
-	<isprint value="${pdict.Response.html.body}" encoding="off"/>
+	<isprint value="${pdict.SeoResponse.html.body}" encoding="off"/>
 </isif>

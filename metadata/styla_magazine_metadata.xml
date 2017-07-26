@@ -3,9 +3,17 @@
 
     <type-extension type-id="SitePreferences">
         <custom-attribute-definitions>
+            <attribute-definition attribute-id="stylaEnabled">
+                <display-name xml:lang="x-default">Styla Enabled</display-name>
+                <description xml:lang="x-default">Determines whether the Styla integration is active for this site or not.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
             <attribute-definition attribute-id="stylaCdnBaseUrl">
                 <display-name xml:lang="x-default">CDN Base URL</display-name>
-                <description xml:lang="x-default">Base URL to Styla CDN from where client-side JavaScript is loaded. The placeholder {USER} will be replaced with the Username site preference value of the respective magazine configuration. {VERSION} will be replaced with the response from the Version Service call.</description>
+                <description xml:lang="x-default">Base URL to Styla CDN from where client-side JavaScript is loaded. The placeholder {USER} will be replaced with the Username attribute value of the respective magazine configuration. {VERSION} will be replaced with the response from the Version Service call.</description>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
@@ -42,6 +50,7 @@
         <group-definitions>
             <attribute-group group-id="StylaMagazine">
                 <display-name xml:lang="x-default">Styla Magazine</display-name>
+                <attribute attribute-id="stylaEnabled"/>
                 <attribute attribute-id="stylaSeoDisabled"/>
                 <attribute attribute-id="stylaSeoCachingTTL"/>
                 <attribute attribute-id="stylaCdnBaseUrl"/>
@@ -52,7 +61,7 @@
     
     <custom-type type-id="StylaMagazineConfiguration">
         <display-name xml:lang="x-default">Styla Magazine Configuration</display-name>
-        <description xml:lang="x-default">Each Custom Object represents one Magazine Configuration.</description>
+        <description xml:lang="x-default">Each Custom Object represents one Magazine Configuration. Key_and_Sort_Order: Use this to give a descriptive name to the configuration. When the Styla cartridge searches for a matching configuration, it will go through the custom objects in order, alphabetically sorted by this attribute. A matching configuration is considered found if the request's path contains the Base Path of the configuration and if the request's locale matches the Allowed Locales attribute.</description>
         <staging-mode>source-to-target</staging-mode>
         <storage-scope>site</storage-scope>
         <key-definition attribute-id="Key_and_Sort_Order">
@@ -71,7 +80,7 @@
             </attribute-definition>
             <attribute-definition attribute-id="categoryID">
                 <display-name xml:lang="x-default">Category ID</display-name>
-                <description xml:lang="x-default">Necessary when using Search controller (or pipeline). Make sure this category has at least one product assigned to it.</description>
+                <description xml:lang="x-default">Necessary when using the Search controller (or pipeline), which typically is app_storefront_controllers-Search-Show (or just Search-Show when using pipelines). Make sure this category has at least one product assigned to it, otherwise the category won't be part of the search result.</description>
                 <type>string</type>
                 <localizable-flag>false</localizable-flag>
                 <mandatory-flag>false</mandatory-flag>
@@ -95,7 +104,7 @@
             </attribute-definition>
             <attribute-definition attribute-id="pipeline">
                 <display-name xml:lang="x-default">Controller Method</display-name>
-                <description xml:lang="x-default">Specify the Magazine Controller Method in this format: cartridge-controller-method. E.g.: app_storefront_controllers-Home-Show.</description>
+                <description xml:lang="x-default">Specify the Magazine Controller Method in this format: cartridge-controller-method. E.g.: app_storefront_controllers-Home-Show. If your storefront code uses pipelines then you can specify a pipeline here, e.g. Home-Show. If you are using pipelines then the cartridge name can be omitted.</description>
                 <type>string</type>
                 <localizable-flag>false</localizable-flag>
                 <mandatory-flag>true</mandatory-flag>
@@ -104,7 +113,7 @@
             </attribute-definition>
             <attribute-definition attribute-id="username">
                 <display-name xml:lang="x-default">Username</display-name>
-                <description xml:lang="x-default">The username of the Styla client</description>
+                <description xml:lang="x-default">Styla user name for this magazine.</description>
                 <type>string</type>
                 <localizable-flag>false</localizable-flag>
                 <mandatory-flag>true</mandatory-flag>
