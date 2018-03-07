@@ -19,8 +19,8 @@ var minicart = null,
 	};
 
 module.exports = function(minicartObject) {
-	window.styla = window.styla || {events: []};
-	styla && styla.events && styla.events.push({'addToCart': addToCart});
+	window.styla = window.styla || {callbacks: []};
+	styla && styla.callbacks && styla.callbacks.push({'addToCart': addToCart});
 	
 	minicart = minicartObject;
 };
