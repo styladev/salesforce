@@ -12,7 +12,7 @@ Please note that OCAPI needs to be configured for Styla to source product data a
 
 The process of setting up your Content Hub(s) usually goes as follows:
 
-1. Install and configure the cartridge on your stage using Conten Hub IDs shared by Styla
+1. Install and configure the cartridge on your stage using Content Hub IDs shared by Styla
 2. Configure OCAPI on your stage
 3. Share the stage URL, credentials and OCAPI endpoints with Styla, including URL parameters for different locales and currencies (if used by you)
 4. Styla integrates product data from stage OCAPI, test your stage Content Hub and asks additional questions, if needed
