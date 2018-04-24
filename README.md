@@ -19,7 +19,7 @@ The process of setting up your Content Hub(s) usually goes as follows:
 5. Configure the cartridge and OCAPI on production, without linking to the Content Hub(s) there and, again, share the URL and OCAPI endpoints with Styla
 6. Make sure your content is ready to go live
 7. Styla conducts final User Acceptance Tests before the go live
-8. Go live (you link to the Content Hub)
+8. Go live (you link to the Content Hub embedded on your production)
 
 ## Salesforce-certified and available on Marketplace
 
