@@ -8,7 +8,7 @@ Please consult the [documentation](https://github.com/styladev/demandware/tree/m
 
 Please note that OCAPI needs to be configured for Styla to source product data and display products in your Content Hub(s) and enable adding them to your cart. This is also described in the documentation.
 
-## The setup process
+## Setup Process
 
 The process of setting up your Content Hub(s) usually goes as follows:
 
