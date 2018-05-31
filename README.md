@@ -8,6 +8,19 @@ Please consult the [documentation](https://github.com/styladev/demandware/tree/m
 
 Please note that OCAPI needs to be configured for Styla to source product data and display products in your Content Hub(s) and enable adding them to your cart. This is also described in the documentation.
 
+
+## SEO Content from Styla's SEO API
+
+The cartridge uses data from Styla's SEO API to:
+* generate tags like: meta tags including `<title>`, canonical link, og:tags, static content inserted into <body>, `robots` instructions
+* insert these tags accordingly into HTML of the template the page with Styla content uses
+  
+This is done to provide search engine bots with data to crawl and index all Styal URLs, which are in fact a Single-Page-Application.
+
+Once you install and configure the module, please open source of the page on which your Styla content is embedded and check if none of the tags mentioned below are duplicated. In case `robots`or `link rel="canonical"` or any other are in the HTML twice, make sure to remove the original ones coming from your default template. Otherwise search engine bots might not be able to crawl all the Styla content or crawl it incorrectly. 
+
+You can finde more information on the SEO API on [this page](https://styladocs.atlassian.net/wiki/spaces/CO/pages/9961486/SEO+API+and+Sitemaps+Integration)
+
 ## Setup Process
 
 The process of setting up your Content Hub(s) usually goes as follows:
