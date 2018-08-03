@@ -367,7 +367,9 @@ function setHttpStatus() {
 		}
 		
 		status = cfg && cfg.seoResponse && cfg.seoResponse.status || null;
-		if (status !== null) {
+		if (status === 404) {
+			Logger.info("Styla Story not found, Status: " + status);
+		} else {
 			response.setStatus(status);
 		}
 	}
