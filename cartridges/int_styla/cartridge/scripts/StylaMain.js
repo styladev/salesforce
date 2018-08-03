@@ -8,7 +8,7 @@
 
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
 var Logger = require('dw/system/Logger').getLogger('styla', 'StylaMain');
-var ServiceRegistry = require('dw/svc/ServiceRegistry');
+var StylaServiceInit = require('./init/StylaServiceInit');
 var Site = require('dw/system/Site');
 
 var CONFIG_CO_TYPE        = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations
@@ -42,7 +42,7 @@ function getSeoContent(config) {
 	}
 
 	// retrieve HTTPService
-	var svc = ServiceRegistry.get('StylaSeoContentHttpService');
+	var svc = StylaServiceInit.StylaSeoContentHttpService;
 
 	// append username to endpoint URL
 	var url = svc.getURL();
@@ -100,7 +100,7 @@ function getContentVersion(config) {
 	var response;
 	
 	// retrieve HTTPService
-	var svc = ServiceRegistry.get('StylaVersionService');
+	var svc = StylaServiceInit.StylaVersionService;
 	
 	// append username to endpoint URL
 	var url = svc.getURL();
@@ -367,10 +367,12 @@ function setHttpStatus() {
 		}
 		
 		status = cfg && cfg.seoResponse && cfg.seoResponse.status || null;
-		if (status === 404) {
-			Logger.info("Styla Story not found, Status: " + status);
-		} else {
-			response.setStatus(status);
+		if (status !== null) {
+			if (status === 404) {
+				Logger.info("Styla Story not found, Status: 404");
+			} else {
+				response.setStatus(status);
+			}
 		}
 	}
 }
