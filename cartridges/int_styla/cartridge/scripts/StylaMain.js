@@ -170,18 +170,17 @@ function getMagazineRootPath(path, basePath) {
 	var idx,
 		result = null;
 	if (!empty(path) && !empty(basePath)) {
-		// remove trailing slash
-		if (basePath[basePath.length - 1] === '/') {
-			basePath = basePath.substr(0, basePath.length - 1);
+		// Add trailing slashes
+		if (path[path.length - 1] !== '/') {
+			path += '/';
+		}
+		if (basePath[basePath.length - 1] !== '/') {
+			basePath += '/';
 		}
 		// search basePath
 		idx = path.indexOf(basePath);
 		if (idx > -1) {
 			result = path.substr(0, idx + basePath.length);
-			// include trailing slash
-			if (result[result.length - 1] !== '/') {
-				result += '/';
-			}
 		}
 	}
 	return result;
