@@ -2,6 +2,6 @@
 	"init": [
 		"./cartridge/scripts/init/StylaServiceInit.js"
 	],
-	
-	"cartridgeVersion": "17.2.0"
+
+	"cartridgeVersion": "17.3.0"
 }

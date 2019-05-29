@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="./markdown.css"/></head>
 <body>
 <h1 id="int_styla">int_styla</h1>
-<h4 id="Version1720">Version 17.2.0</h4>
+<h4 id="Version1720">Version 17.3.0</h4>
 <h2 id="TableofContents">Table of Contents</h2>
 <ol>
 <li><a href="#Summary">Summary</a></li>
@@ -184,13 +184,13 @@ You can query the version info using an URL like this (adjust host name and site
 <pre><code><span class="hljs-keyword">https</span>://my-sandbox.demandware.net/<span class="hljs-command"><span class="hljs-keyword">on</span>/<span class="hljs-title">demandware</span>.<span class="hljs-title">store</span>/<span class="hljs-title">Sites-SiteGenesis-Site</span>/<span class="hljs-title">default</span>/<span class="hljs-title">StylaMagazine-CartridgeVersion</span></span>
 </code></pre>
 <p>The response will looks like this:</p>
-<pre><code>{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"17.2.0"</span> </span>}
+<pre><code>{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"17.3.0"</span> </span>}
 </code></pre>
 <p>If you specify a Styla username as URL parameter then the version info will include the Styla SEO content version:</p>
 <pre><code><span class="hljs-keyword">https</span>://my-sandbox.demandware.net/<span class="hljs-command"><span class="hljs-keyword">on</span>/<span class="hljs-title">demandware</span>.<span class="hljs-title">store</span>/<span class="hljs-title">Sites-SiteGenesis-Site</span>/<span class="hljs-title">default</span>/<span class="hljs-title">StylaMagazine-CartridgeVersion</span>?<span class="hljs-title">username</span>=<span class="hljs-title">demo</span></span>
 </code></pre>
 <p>Example response:</p>
-<pre><code>{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"17.2.0"</span></span>, "<span class="hljs-attribute">seoContent</span>": <span class="hljs-value">{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"ebbaa86893-23"</span> </span>} </span>}
+<pre><code>{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"17.3.0"</span></span>, "<span class="hljs-attribute">seoContent</span>": <span class="hljs-value">{ "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"ebbaa86893-23"</span> </span>} </span>}
 </code></pre>
 <p>Styla expects the version information to be served from this friendly URL: <code>/styla-plugin-version/</code>.
 Please go to <em>Merchant Tools &gt;  Site URLs &gt;  URL Rules &gt; Pipeline URLs</em> and configure this new alias:</p>
@@ -247,7 +247,7 @@ On Production, a valid client ID needs to be requested from Salesforce.</p>
 <pre><code>{
   &quot;_v&quot;:&quot;16.1&quot;,
   &quot;clients&quot;:
-  [ 
+  [
     {
         &quot;client_id&quot;: &quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;,
         &quot;response_headers&quot;: {&quot;x-config-comment&quot;: &quot;styla&quot;},
@@ -388,7 +388,7 @@ Replace the line</p>
             <span class="hljs-comment">//   app.getController('Home').ErrorNotFound();</span>
             <span class="hljs-comment">// or display the default redirect error template:</span>
             <span class="hljs-comment">//   app.getView().render('util/redirecterror'); </span>
-            app.getView().render(<span class="hljs-string">'util/redirecterror'</span>);  
+            app.getView().render(<span class="hljs-string">'util/redirecterror'</span>);
         }
     } <span class="hljs-keyword">else</span> {
         app.getView({
@@ -462,7 +462,7 @@ if <code>httpParameterMap.cgid</code> is not submitted.</p>
         cgid = httpParameterMap.cgid.value;
     }
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'MagazineConfiguration'</span> <span class="hljs-keyword">in</span> request.custom &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration) &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration.categoryID)) {
-        // found category ID stored by StylaMagazine.alias()  
+        // found category ID stored by StylaMagazine.alias()
         cgid = request.custom.MagazineConfiguration.categoryID;
     }
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(cgid)) {
@@ -584,13 +584,13 @@ configuration is stored.</p>
 <p>To account for this, open <code>/app_storefront_controllers/cartridge/scripts/models/SearchModel.js</code> and in
 function <code>initializeProductSearchModel</code> replace these lines</p>
 <pre><code>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'MagazineCategoryId'</span> <span class="hljs-keyword">in</span> request.custom &amp;&amp; !empty(request.custom.<span class="hljs-constant">MagazineCategoryId</span>)) {
-        <span class="hljs-regexp">//</span> found category <span class="hljs-constant">ID</span> stored by <span class="hljs-constant">StylaMagazine</span>.<span class="hljs-keyword">alias</span>()  
+        <span class="hljs-regexp">//</span> found category <span class="hljs-constant">ID</span> stored by <span class="hljs-constant">StylaMagazine</span>.<span class="hljs-keyword">alias</span>()
         cgid = request.custom.<span class="hljs-constant">MagazineCategoryId</span>;
     }
 </code></pre>
 <p>with this:</p>
 <pre><code>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'MagazineConfiguration'</span> <span class="hljs-keyword">in</span> request.custom &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration) &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration.categoryID)) {
-        // found category ID stored by StylaMagazine.alias()  
+        // found category ID stored by StylaMagazine.alias()
         cgid = request.custom.MagazineConfiguration.categoryID;
     }
 </code></pre>
@@ -639,7 +639,7 @@ described in chapter <em>Implementation Guide</em>.</p>
 <p>The storefront shows the Styla magazine after successful installation and configuration. The features of
 the magazine depend on the Styla system.</p>
 <p>The cartridge exposes the endpoint <em>StylaMagazine-CartridgeVersion</em> which renders the cartridge's
-version as a JSON response, e.g.: <code>{&quot;version&quot;:&quot;17.2.0&quot;}</code>.</p>
+version as a JSON response, e.g.: <code>{&quot;version&quot;:&quot;17.3.0&quot;}</code>.</p>
 <h2 id="KnownIssues">Known Issues</h2>
 <p>There are currently no known issues.</p>
 <h2 id="ReleaseHistory">Release History</h2>
@@ -651,6 +651,7 @@ version as a JSON response, e.g.: <code>{&quot;version&quot;:&quot;17.2.0&quot;}
 <tr><td>16.1.0</td><td>2016-MAY</td><td>Initial Release</td></tr>
 <tr><td>16.1.1</td><td>2016-OCT</td><td>Configuration using custom objects, specify locale, send request parameters to SEO API</td></tr>
 <tr><td>17.1.0</td><td>2017-MAY</td><td>Added compatibility with pipeline architecture, improved version endpoint, bug fixes, code cleanup</td></tr>
-  <tr><td>17.2.0</td><td>2018-AUG</td><td><ul><li>added logging 404 status from Styla and fixed 404 Styla page not showing</li><li>changed deprecated SFCC ServiceRegistry class to new LocalServiceRegistry class</li><li>Styla cart.js updated to serve for both layout engines</li></ul></td></tr>
+<tr><td>17.2.0</td><td>2018-AUG</td><td><ul><li>added logging 404 status from Styla and fixed 404 Styla page not showing</li><li>changed deprecated SFCC ServiceRegistry class to new LocalServiceRegistry class</li><li>Styla cart.js updated to serve for both layout engines</li></ul></td></tr>
+<tr><td>17.3.0</td><td>2019-MAY</td><td><ul><li>moved rendered html into styla div for hydration</li></ul></td></tr>
 </tbody>
 </table>
