@@ -37,3 +37,35 @@ The process of setting up your Content Hub(s) usually goes as follows:
 ## Salesforce-certified and available on Marketplace
 
 The latest version of this cartridge has been certified by Salesforce and can also be downloaded from its marketplace: https://xchange.demandware.com/docs/DOC-34370
+
+
+## Solution in SFCC for linking to one page on multiple SFCC locales from Styla account embedded there
+
+The below solution helps you if you use one Styla account on multiple locales, for instance:
+yourname-en on yourdomain/gb/en/styla/ and yourdomain/de/en/styla/
+Using this solution, you can use just one link on a given Styla page in both accounts and they will be routed by SFCC correctly. 
+
+The solution below is provided by courtesy of NorthSails https://webstore.northsails.com 
+
+---
+
+The following DemandWare pipelines are being used to create the internal URL:
+ - Page-Show (content pages / assets)
+ - Search-Show (category pages / storefront)
+In the DemandWare Business Manager, the content manager has to make the following changes:
+
+1. Visit the path "Merchant Tools > SEO > URL Rules > Pipeline URLs"
+2. Create an "alias" for the above pipeline URLs (could be already existing)
+3. In our case:
+ - "search" resolves To "Page-Show"
+ - "page" resolves To "Search-Show"
+
+After this has been set up, content or category pages can be accessed using:
+ - Content page: `https://webstore.northsails.com/it/it/show/?cid=about` in which "about" can be replaced with the ID of the content asset ID.
+ - Category page: `https://webstore.northsails.com/it/it/search/?cgid=featured-new-men` in which "featured-new-men" can be replaced with the ID of the catalog storefront category.
+
+In our case we can use Styla's relative URL option to support our locales, using:
+ - `../show/?cid=about`
+ - `../search/?cgid=featured-new-men`
+
+
