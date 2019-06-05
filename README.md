@@ -47,8 +47,6 @@ Using this solution, you can use just one link on a given Styla page in both acc
 
 The solution below is provided by courtesy of NorthSails https://webstore.northsails.com 
 
----
-
 The following DemandWare pipelines are being used to create the internal URL:
  - Page-Show (content pages / assets)
  - Search-Show (category pages / storefront)
