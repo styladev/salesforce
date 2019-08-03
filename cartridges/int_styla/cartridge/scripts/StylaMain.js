@@ -30,13 +30,7 @@ function getSeoContent(config) {
 
 	// strip base path from current path to obtain the magazine sub path only
 	var magazinePath = config['path'];
-	var idx = magazinePath.indexOf(config['basePath']);
-	if (idx > -1) {
-		magazinePath = magazinePath.substring(idx + config['basePath'].length);
-	}
-	else {
-		Logger.error('getSeoContent: config.basePath not found in config.path; config = ' + JSON.stringify(config));
-	} 
+ 
 	if (empty(magazinePath)) {
 		magazinePath = '/';
 	}
