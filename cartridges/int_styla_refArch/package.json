@@ -1,0 +1,7 @@
+{
+	"init": [
+		"./cartridge/scripts/init/StylaServiceInit.js"
+	],
+
+	"cartridgeVersion": "17.3.0"
+}
