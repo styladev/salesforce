@@ -274,7 +274,9 @@ function getMagazineConfiguration(path, getContentVer) {
             while (iter2.hasNext()) {
                 obj = iter2.next();
                 if (obj.custom.homepage) {
-                    path = '/';
+                    if (path.length < 2) {
+                        path = '/';
+                    }
                     localeMatches = isAllowedLocale(locale, obj.custom.locales && obj.custom.locales.slice() || null);
                     if (localeMatches) {
 						// read config from custom object
