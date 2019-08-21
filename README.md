@@ -34,6 +34,8 @@ The process of setting up your Content Hub(s) usually goes as follows:
 7. Styla conducts final User Acceptance Tests before the go live
 8. Go live (you link to the Content Hub embedded on your production)
 
+**Important: When updating from any previous version to 18.0.0 or higher, please let Styla know beforehand. Your settings need to be updated so that everything works fine.**
+
 ## Salesforce-certified and available on Marketplace
 
 The latest version of this cartridge has been certified by Salesforce and can also be downloaded from its marketplace: https://xchange.demandware.com/docs/DOC-34370
