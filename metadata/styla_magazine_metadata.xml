@@ -94,6 +94,13 @@
                 <mandatory-flag>true</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
+            <attribute-definition attribute-id="homepage">
+                <display-name xml:lang="x-default">HomePage</display-name>
+                <description xml:lang="x-default">Check this box and the Base Path will be ignored. The Magazine will show up on the homepage.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
             <attribute-definition attribute-id="locales">
                 <display-name xml:lang="x-default">Allowed Locales</display-name>
                 <description xml:lang="x-default">A list of locale identifiers. A magazine configuration is only considered a match if the current request's path contains the Base Path of the configuration and if the request's locale is found in this list. Leave empty to allow all locales. Example entries: de_DE, fr_CH.</description>
@@ -131,6 +138,7 @@
                 <attribute attribute-id="pipeline"/>
                 <attribute attribute-id="categoryID"/>
                 <attribute attribute-id="locales"/>
+                <attribute attribute-id="homepage"/>
             </attribute-group>
         </group-definitions>
     </custom-type>

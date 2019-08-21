@@ -70,7 +70,7 @@ function getSeoContent(config) {
         Logger.error(result.errorMessage);
     } else if (result.object && result.object.errorMessage) {
         Logger.error(result.object.errorMessage);
-    }		else {
+    } else {
         Logger.error('Invalid response from SEO service: ' + JSON.stringify(result.object));
     }
 
@@ -132,7 +132,7 @@ function isAllowedLocale(loc, allowedLocales) {
 
     if (typeof allowedLocales !== 'undefined' && allowedLocales !== null && allowedLocales.length > 0) {
         result = allowedLocales.indexOf(loc) > -1;
-    }	else {
+    } else {
 		// allowedLocales is not defined or empty list
         result = true;
     }
@@ -201,6 +201,7 @@ function getMagazineConfigurationFromObj(obj, path, getContentVer) {
             pipeline: obj.custom.pipeline || '',
             categoryID: obj.custom.categoryID || '',
             basePath: obj.custom.basePath || '',
+            homepage: obj.custom.homepage || '',
             seoDisabled: site.getCustomPreferenceValue('stylaSeoDisabled'),
             seoCachingTTL: site.getCustomPreferenceValue('stylaSeoCachingTTL'),
             jsLibUrl: cdnBaseUrl.replace('{USER}', obj.custom.username || ''),
@@ -389,6 +390,65 @@ function setHttpStatus() {
 }
 
 
+/**
+ * If the current URL is part of a magazine, then jump to the corresponding
+ * controller method so that the original URL is preserved in the browser.
+ *
+ * This is called from RedirectURL.start() if no matching redirect rule was found.
+ *
+ * E.g. assume we have an alias 'magazine' assigned to a pipeline which renders a Styla magazine.
+ * When interacting with the magazine the Styla JavaScript will modify the URL in the
+ * customer's browser to e.g. 'magazine/stories/5'.
+ * Because RedirectUrl.start() doesn't find a matching rule for 'magazine/stories/5'
+ * it calls this function.
+ *
+ * @param path Original URL before redirect.
+ * @returns True, if a matching magazine configuration was found and the configured
+ * controller method was called successfully.
+ */
+function alias(path) {
+    var result = false,
+        magazineConfig = getConfigForAlias(path),
+        parts;
+
+    if (magazineConfig) {
+		// read controller method method from configuration
+        parts = magazineConfig.pipeline.split('-');
+        if (parts.length === 3) {
+            var controllerCartridge = parts[0],
+                controllerName = parts[1],
+                controllerMethod = parts[2],
+                controllerPath = controllerCartridge + '/cartridge/controllers/' + controllerName,
+                controller;
+            controller = require(controllerPath);
+            if (typeof controller[controllerMethod] === 'function') {
+				// store category ID in case the controller method is Search.show(),
+				// and header template uses this to set HTTP status
+                request.custom.MagazineConfiguration = magazineConfig;
+				// call controller method
+                controller[controllerMethod]();
+                result = true;
+            } else {
+                Logger.error('alias: method not found or not a function: ' + magazineConfig.pipeline);
+            }
+        } else {
+            var pip = magazineConfig.pipeline;
+            if (typeof magazineConfig.pipeline === 'undefined') {
+                pip = '(undefined)';
+            } else if (magazineConfig.pipeline === null) {
+                pip = '(null)';
+            }
+            Logger.error('alias: invalid controller method specified: "{0}"', pip);
+        }
+    } else {
+        Logger.debug('no matching config found for path: ' + path);
+    }
+
+
+    return result;
+}
+
+
 /*
  * Module exports
  */
@@ -396,6 +456,11 @@ function setHttpStatus() {
 /** Retrieve the content version to be appended to a magazine URL.
  * @see module:controllers/StylaMain~getContentVersion */
 exports.GetContentVersion = getContentVersion;
+
+
+/** Retrieve the content version to be appended to a magazine URL.
+ * @see module:controllers/StylaMain~getContentVersion */
+exports.Alias = alias;
 
 /** Find magazine configuration matching the given path.
  * @see module:controllers/StylaMain~getConfigForAlias */
