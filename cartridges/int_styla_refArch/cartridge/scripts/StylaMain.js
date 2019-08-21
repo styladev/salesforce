@@ -276,13 +276,13 @@ function getMagazineConfiguration(path, getContentVer) {
                 if (obj.custom.homepage) {
                     if (path.length < 2) {
                         path = '/';
-                    }
-                    localeMatches = isAllowedLocale(locale, obj.custom.locales && obj.custom.locales.slice() || null);
-                    if (localeMatches) {
-						// read config from custom object
-                        config = getMagazineConfigurationFromObj(obj, path, getContentVer);
-                        skipHomepageIter = true;
-                        break;
+                        localeMatches = isAllowedLocale(locale, obj.custom.locales && obj.custom.locales.slice() || null);
+                        if (localeMatches) {
+                            // read config from custom object
+                            config = getMagazineConfigurationFromObj(obj, path, getContentVer);
+                            skipHomepageIter = true;
+                            break;
+                        }
                     }
                 }
             }

@@ -19,7 +19,7 @@ function renderContent(template, res) {
     var pdict = StylaMain.GetRenderContent();
     if (pdict) {
         res.render(template, pdict);
-    }    else {
+    } else {
         res.render('styla/empty');
     }
 }
