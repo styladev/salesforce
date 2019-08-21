@@ -1295,12 +1295,12 @@ function setupSearch(apiProductSearch, params) {
     var cgid = null;
     if (params.cgid) {
         cgid = params.cgid;
-    } else if ('MagazineConfiguration' in request.custom && !empty(request.custom.MagazineConfiguration)
-     && !empty(request.custom.MagazineConfiguration.categoryID)) {
+    } else if ('MagazineConfiguration' in request.custom && request.custom.MagazineConfiguration
+     && request.custom.MagazineConfiguration.categoryID) {
         // found category ID stored by StylaMagazine.alias()
         cgid = request.custom.MagazineConfiguration.categoryID;
     }
-    if (!empty(cgid)) {
+    if (cgid) {
         var sortingRule = params.srule ? CatalogMgr.getSortingRule(params.srule) : null;
         var selectedCategory = CatalogMgr.getCategory(cgid);
         selectedCategory = selectedCategory && selectedCategory.online ? selectedCategory : null;
@@ -1319,8 +1319,8 @@ function setupSearch(apiProductSearch, params) {
 <p>Add in the search method before returning the result the following
       <pre><code>    
 
-    if ('MagazineConfiguration' in request.custom && !empty(request.custom.MagazineConfiguration)
-     && !empty(request.custom.MagazineConfiguration.categoryID)) {
+    if ('MagazineConfiguration' in request.custom && request.custom.MagazineConfiguration
+     && request.custom.MagazineConfiguration.categoryID) {
         result.category = apiProductSearch.category;
         result.categoryTemplate = categoryTemplate;
     }
