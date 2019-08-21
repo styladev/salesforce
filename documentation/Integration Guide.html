@@ -35,7 +35,6 @@
                <li><a href="#SetupSFRA">Setup</a></li>
                <li><a href="#ConfigurationSFRA">Configuration</a></li>
                <li><a href="#CustomCodeSFRA">Custom Code</a></li>
-               <li><a href="#CartridgeUpgradeSFRA">Cartridge Upgrade</a></li>
                <li><a href="#ExternalInterfacesSFRA">External Interfaces</a></li>
                <li><a href="#TestingSFRA">Testing</a></li>
             </ol>
@@ -255,7 +254,33 @@
                <td>Base Path</td>
                <td>String</td>
                <td>yes</td>
-               <td>URL Path of the Styla Magazine. A matching configuration is considered found if the request's path contains the <em>Base Path</em> of the configuration and if the request's locale matches the <em>Allowed Locales</em> attribute.</td>
+               <td>URL Path of the Styla Magazine. A matching configuration is considered found if the request's path contains the <em>Base Path</em> of the configuration and if the request's locale matches the <em>Allowed Locales</em> attribute.
+               	If Homepage attribute is checked, add '/' to skip mandatory check.
+               </td>
+            </tr>
+            <tr>
+               <td>Homepage</td>
+               <td>Boolean</td>
+               <td>no</td>
+               <td>If the magazine is intended to be used for the homepage check this attribute.
+                  If this attribute is checked, add '/' to Base Path in order to skip mandatory check.
+                  <span style="color: red">Only one Homepage configuration should exist per site.</span>
+                  Aliases should be configuered for a clear domain name like in the following example:
+                  <pre>
+{
+   "__version":"1",
+   "styla01-tech-prtnr-eu03-dw.demandware.net":
+   [
+      {
+         "pipeline": "Home-Show"
+      },
+      { 
+         "if-site-path": "", 
+         "pipeline": "Home-Show"
+      }
+   ]
+}              </pre>
+               </td>
             </tr>
             <tr>
                <td>Controller Method</td>
@@ -941,7 +966,24 @@
                <td>Boolean</td>
                <td>no</td>
                <td>If the magazine is intended to be used for the homepage check this attribute.
-               	If this attribute is checked, add '/' to skip mandatory check.</td>
+                  If this attribute is checked, add '/' to Base Path in order to skip mandatory check.
+                  <span style="color: red">Only one Homepage configuration should exist per site.</span>
+                  Aliases should be configuered for a clear domain name like in the following example:
+<pre>
+{
+   "__version":"1",
+   "styla01-tech-prtnr-eu03-dw.demandware.net":
+   [
+      {
+         "pipeline": "Home-Show"
+      },
+      { 
+         "if-site-path": "", 
+         "pipeline": "Home-Show"
+      }
+   ]
+} </pre>
+               </td>
             </tr>
             <tr>
                <td>Controller Method</td>
@@ -1330,117 +1372,6 @@ require('./components/spinner');
       <p>The estimated effort to make the necessary changes to the shop cartridge is 8-12 hours, depending on
          the features being used (Styla SEO, add to cart feature, multiple magazines, etc.).
       </p>
-      <h3 id="CartridgeUpgradeSFRA">Cartridge Upgrade</h3>
-      <p>When upgrading the cartridge please follow the instructions below in order, starting from the version
-         you are upgrading from.
-      </p>
-      <h4 id="Fromversion1610">From version 16.1.0</h4>
-      <h5 id="Importmetadata">Import metadata</h5>
-      <p>Follow the steps in chapter <em>Import metadata definitions</em> to create a new custom object definition,
-         which is used to store magazine configurations.
-      </p>
-      <h5 id="Magazineconfigurationnowusescustomobjects">Magazine configuration now uses custom objects</h5>
-      <p>Magazine configurations are now created using custom objects of type <code>StylaMagazineConfiguration</code>.
-         For each of your configured magazines you need to create one custom object.
-      </p>
-      <p>In Business Manager go to <em>Merchant Tools &gt; Custom Objects &gt; Custom Object Editor</em> and select the
-         <em>Object Type</em> <code>StylaMagazineConfiguration</code>.
-      </p>
-      <p>Click on the <em>New</em> button to create a new magazine configuration.</p>
-      <p>The next table shows how the old site preference entries map to the new custom object attributes.
-         For more details on the custom object attributes see chapter <em>Custom Objects for Magazine configuration</em>.
-      </p>
-      <table>
-         <thead>
-            <tr>
-               <th>Old site preference</th>
-               <th>New custom object attribute</th>
-               <th>Comment</th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr>
-               <td><em>(none)</em></td>
-               <td>Key_and_Sort_Order</td>
-               <td>Choose a descriptive name for the magazine configuration. Note that configurations are sorted by this attribute when the cartridge searches for a magazine configuration which matches the current request.</td>
-            </tr>
-            <tr>
-               <td><em>(none)</em></td>
-               <td>Enabled</td>
-               <td>Make sure this is checked, else the configuration is ignored by the cartridge.</td>
-            </tr>
-            <tr>
-               <td>Username</td>
-               <td>Username</td>
-            </tr>
-            <tr>
-               <td>Magazine Base Path</td>
-               <td>Base Path</td>
-            </tr>
-            <tr>
-               <td>Magazine Controller Method</td>
-               <td>Controller Method</td>
-            </tr>
-            <tr>
-               <td>Magazine Category ID</td>
-               <td>Category ID</td>
-            </tr>
-            <tr>
-               <td><em>(none)</em></td>
-               <td>Allowed Locales</td>
-               <td>You can leave this empty, see chapter <em>Custom Objects for Magazine configuration</em>.</td>
-            </tr>
-         </tbody>
-      </table>
-      <p>Once you have confirmed that the magazines are working using the custom objects, then you can
-         delete the now unused site preferences:
-      </p>
-      <p>Go to <em>Administration &gt; Site Development &gt; System Object Types &gt; SitePreferences</em> and
-         open the <em>Attribute Definitions</em> tab.
-      </p>
-      <p>In the <em>ID or Name</em> input type <code>styla</code> and click the <em>Find</em> button.</p>
-      <p>Select the following site preferences from the search result and then click <em>Delete</em>:</p>
-      <ul>
-         <li>Username</li>
-         <li>Magazine Base Path</li>
-         <li>Magazine Controller Method</li>
-         <li>Magazine Category ID</li>
-      </ul>
-      <h5 id="Newtemplatesformagazineinclusion">New templates for magazine inclusion</h5>
-      <p>Instead of requiring the merchant to write the remote includes directly into their code the cartridge now
-         contains templates which in turn perform the remote include. Please perform the following steps to include
-         these new templates (which also pass an additional parameter for the remote includes).
-      </p>
-      <p>In your storefront code replace this line (typically found in <code>htmlhead.isml</code>)</p>
-      <pre><code>&lt;isinclude url=<span class="hljs-string">"<span class="hljs-subst">${URLUtils.url(<span class="hljs-string">'StylaMagazine-HeaderContent'</span>, <span class="hljs-string">'magazinepath'</span>, pdict.OriginalURL || pdict.CurrentRequest.httpHeaders[<span class="hljs-string">'x-is-path_info'</span>])}</span>"</span>/&gt;
-</code></pre>
-      <p>with this one:</p>
-      <pre><code><span class="hljs-tag">&lt;<span class="hljs-title">isinclude</span> <span class="hljs-attribute">template</span>=<span class="hljs-value">"styla/headerinclude"</span>/&gt;</span>
-</code></pre>
-      <p>Then replace this line (in your templates which render a Styla magazine)</p>
-      <pre><code>&lt;isinclude url=<span class="hljs-string">"<span class="hljs-subst">${URLUtils.url(<span class="hljs-string">'StylaMagazine-BodyContent'</span>, <span class="hljs-string">'magazinepath'</span>, pdict.OriginalURL || pdict.CurrentRequest.httpHeaders[<span class="hljs-string">'x-is-path_info'</span>])}</span>"</span>/&gt;
-</code></pre>
-      <p>with this one:</p>
-      <pre><code><span class="hljs-tag">&lt;<span class="hljs-title">isinclude</span> <span class="hljs-attribute">template</span>=<span class="hljs-value">"styla/bodyinclude"</span>/&gt;</span>
-</code></pre>
-      <h5 id="SearchModeljsintegrationchanged">SearchModel.js integration changed</h5>
-      <p>Previously <code>StylaMagazine.alias()</code> only stored the category ID in the current request. Now the whole magazine
-         configuration is stored.
-      </p>
-      <p>To account for this, open <code>/app_storefront_controllers/cartridge/scripts/models/SearchModel.js</code> and in
-         function <code>initializeProductSearchModel</code> replace these lines
-      </p>
-      <pre><code>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'MagazineCategoryId'</span> <span class="hljs-keyword">in</span> request.custom &amp;&amp; !empty(request.custom.<span class="hljs-constant">MagazineCategoryId</span>)) {
-        <span class="hljs-regexp">//</span> found category <span class="hljs-constant">ID</span> stored by <span class="hljs-constant">StylaMagazine</span>.<span class="hljs-keyword">alias</span>()
-        cgid = request.custom.<span class="hljs-constant">MagazineCategoryId</span>;
-    }
-</code></pre>
-      <p>with this:</p>
-      <pre><code>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-string">'MagazineConfiguration'</span> <span class="hljs-keyword">in</span> request.custom &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration) &amp;&amp; !<span class="hljs-keyword">empty</span>(request.custom.MagazineConfiguration.categoryID)) {
-        // found category ID stored by StylaMagazine.alias()
-        cgid = request.custom.MagazineConfiguration.categoryID;
-    }
-</code></pre>
       <h3 id="ExternalInterfacesSFRA">External Interfaces</h3>
       <p>A call to the Styla SEO Web Service is being made for each request to fetch the corresponding SEO data
          for search engines. The calls are cached and the caching time can be configured in the site
