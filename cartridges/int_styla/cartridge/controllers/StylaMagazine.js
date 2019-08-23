@@ -61,12 +61,6 @@ function cartridgeVersion() {
 		},
 		str;
 
-	if (request.httpParameterMap.isParameterSubmitted('username')) {
-		var StylaMain = require('/int_styla/cartridge/scripts/StylaMain');
-		var userName = request.httpParameterMap.get('username').stringValue;
-		versionInfo.seoContent = StylaMain.GetContentVersion({username: userName});
-	}
-	
 	str = JSON.stringify(versionInfo, null, '\t');
 	
 	response.setContentType('application/json');

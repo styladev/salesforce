@@ -80,48 +80,6 @@ function getSeoContent(config) {
     return response;
 }
 
-
-/**
- * Retrieve the content version to be appended to a magazine URL.
- *
- * @param config The current Magazine Config object.
- * @returns The service call response.
- */
-function getContentVersion(config) {
-    var response;
-
-	// retrieve HTTPService
-    var svc = StylaServiceInit.StylaVersionService;
-
-	// append username to endpoint URL
-    var url = svc.getURL();
-    svc.setURL(url + config.username);
-
-	// set caching TTL (and convert from minutes to seconds)
-    var cachingTTL = config.seoCachingTTL * 60;
-    if (cachingTTL) {
-        svc.setCachingTTL(cachingTTL);
-    }
-
-	// make the web service call
-    var result = svc.call();
-
-	// check result
-    if (result && result.isOk() && result.object && !result.object.errorMessage) {
-        response = result.object;
-    } else {
-        if (result.errorMessage) {
-            Logger.error(result.errorMessage);
-        } else if (result.object && result.object.errorMessage) {
-            Logger.error(result.object.errorMessage);
-        }
-        response = { error: true };
-    }
-
-    return response;
-}
-
-
 /**
  * Check if locale is in list of allowed locales.
  * @param loc String			Locale identifier, e.g. 'default' or 'en_US'
@@ -182,12 +140,11 @@ function getMagazineRootPath(path, basePath) {
  *
  * @param obj 				Custom object which stores a magazine configuration.
  * @param path 				Path of the request for which the magazine will be displayed.
- * @param getContentVer		If true, then the request to get the content version is performed.
  * 							If false, then the result object's @jsLibUrl and @cssUrl maybe invalid and shouldn't be used.
  *
  * @returns object
  */
-function getMagazineConfigurationFromObj(obj, path, getContentVer) {
+function getMagazineConfigurationFromObj(obj, path) {
     var site = Site.getCurrent(),
         cdnBaseUrl = site.getCustomPreferenceValue('stylaCdnBaseUrl'),
         cssBaseUrl = site.getCustomPreferenceValue('stylaCssBaseUrl'),
@@ -207,15 +164,8 @@ function getMagazineConfigurationFromObj(obj, path, getContentVer) {
             cssUrl: cssBaseUrl.replace('{USER}', obj.custom.username || '')
         };
 
-    if (getContentVer) {
-        versionResponse = getContentVersion(config);
-        if (!versionResponse.error && !empty(versionResponse.version)) {
-            version = versionResponse.version;
-        }
-    }
-
-    config.jsLibUrl = config.jsLibUrl.replace('{VERSION}', version);
-    config.cssUrl = config.cssUrl.replace('{VERSION}', version);
+    config.jsLibUrl = config.jsLibUrl;
+    config.cssUrl = config.cssUrl;
 
     if (!config.seoDisabled) {
         config.seoResponse = getSeoContent(config);
@@ -232,11 +182,10 @@ function getMagazineConfigurationFromObj(obj, path, getContentVer) {
  *
  * @param path 				The URL path.
  * @param queryString 		The query parameters of the original request.
- * @param getContentVer
  *
  * @returns The magazine config values from the site preferences.
  */
-function getMagazineConfiguration(path, getContentVer) {
+function getMagazineConfiguration(path) {
     var iter,
         iter2,
         obj,
@@ -261,7 +210,7 @@ function getMagazineConfiguration(path, getContentVer) {
                 localeMatches = isAllowedLocale(locale, obj.custom.locales && obj.custom.locales.slice() || null);
                 if (localeMatches) {
 					// read config from custom object
-                    config = getMagazineConfigurationFromObj(obj, path, getContentVer);
+                    config = getMagazineConfigurationFromObj(obj, path);
                     skipHomepageIter = true;
                     break;
                 }
@@ -278,7 +227,7 @@ function getMagazineConfiguration(path, getContentVer) {
                         localeMatches = isAllowedLocale(locale, obj.custom.locales && obj.custom.locales.slice() || null);
                         if (localeMatches) {
                             // read config from custom object
-                            config = getMagazineConfigurationFromObj(obj, path, getContentVer);
+                            config = getMagazineConfigurationFromObj(obj, path);
                             skipHomepageIter = true;
                             break;
                         }
@@ -301,11 +250,10 @@ function getMagazineConfiguration(path, getContentVer) {
  */
 function getConfigForAlias(path) {
     var result = null,
-        getContentVer = false, // skip request for content version, we only need SEO request to determine HTTP status code
         magazineConfig;
 
     if (STYLA_ENABLED) {
-        magazineConfig = getMagazineConfiguration(path, getContentVer);
+        magazineConfig = getMagazineConfiguration(path);
         if (magazineConfig.valid) {
             result = magazineConfig;
         }
@@ -322,22 +270,13 @@ function getRenderContent() {
     var result = null,
         magazineConfig,
         seoResponse = null,
-
-        magazinePath,
-        queryString,
-        getContentVer;
+        magazinePath;
 
     if (STYLA_ENABLED) {
 		// read parameters that were passed via remote-include
         magazinePath = request.httpParameterMap.magazinepath.submitted && request.httpParameterMap.magazinepath.stringValue || null;
-        queryString = request.httpParameterMap.querystring.submitted && request.httpParameterMap.querystring.stringValue || null;
-        getContentVer = request.httpParameterMap.getcontentver.submitted && request.httpParameterMap.getcontentver.stringValue === 'true';
 
-        if (!empty(magazinePath) && magazinePath.indexOf('?') < 0 && !empty(queryString)) {
-            magazinePath += '?' + queryString;
-        }
-
-        magazineConfig = getMagazineConfiguration(magazinePath, getContentVer);
+        magazineConfig = getMagazineConfiguration(magazinePath);
         if (magazineConfig.valid) {
 			// found a magazine configuration that matches the original request's path
             result = {
@@ -361,7 +300,6 @@ function setHttpStatus() {
     var req = request,
         headers = req.httpHeaders,
         cfg = 'MagazineConfiguration' in req.custom && req.custom.MagazineConfiguration || null,
-        getContentVer = false, // skip request for content version, we only need SEO request to determine HTTP status code
         path,
         status;
 
@@ -373,7 +311,7 @@ function setHttpStatus() {
                 path += '?' + headers.get('x-is-query_string');
             }
 
-            cfg = getMagazineConfiguration(path, getContentVer);
+            cfg = getMagazineConfiguration(path);
             req.custom.MagazineConfiguration = cfg;
         }
 
@@ -392,10 +330,6 @@ function setHttpStatus() {
 /*
  * Module exports
  */
-
-/** Retrieve the content version to be appended to a magazine URL.
- * @see module:controllers/StylaMain~getContentVersion */
-exports.GetContentVersion = getContentVersion;
 
 /** Find magazine configuration matching the given path.
  * @see module:controllers/StylaMain~getConfigForAlias */
