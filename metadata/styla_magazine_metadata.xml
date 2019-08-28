@@ -18,7 +18,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
-                <default-value>//cdn.styla.com/scripts/clients/{USER}.js?v={VERSION}</default-value>
+                <default-value>//cdn.styla.com/scripts/clients/{USER}.js</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="stylaCssBaseUrl">
                 <display-name xml:lang="x-default">CSS Base URL</display-name>
@@ -27,7 +27,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
-                <default-value>//cdn.styla.com/styles/clients/{USER}.css?v={VERSION}</default-value>
+                <default-value>//cdn.styla.com/styles/clients/{USER}.css</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="stylaSeoCachingTTL">
                 <display-name xml:lang="x-default">SEO Caching TTL</display-name>
