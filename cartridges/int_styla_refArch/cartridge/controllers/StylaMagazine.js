@@ -34,20 +34,4 @@ server.get('BodyContent', function (req, res, next) {
     return next();
 });
 
-
-server.get('CartridgeVersion', function (req, res, next) {
-    var versionInfo = {
-        version: require('~/package.json').cartridgeVersion
-    };
-
-    if (req.querystring.username) {
-        var StylaMain = require('/int_styla_refArch/cartridge/scripts/StylaMain');
-        var userName = req.querystring.username;
-        versionInfo.seoContent = StylaMain.GetContentVersion({ username: userName });
-    }
-
-    res.json(versionInfo);
-    return next();
-});
-
 module.exports = server.exports();
