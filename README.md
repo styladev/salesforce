@@ -1,6 +1,6 @@
 # Styla Salesforce Commerce Cloud Cartridge
 
-This cartridge connects your Salesforce Commerce Cloud with [Styla](http://www.styla.com/) Content Hub. The first diagram on [this page](https://styladocs.atlassian.net/wiki/spaces/CO/pages/9961481/Technical+Integration) should provide you an overview of what the plugin does and how it exchanges data with Styla. 
+This cartridge connects your Salesforce with [Styla](http://www.styla.com/) by embedding Styla content on a specific path. [This documentation page](https://docs.styla.com/) should provide you an overview of how Styla works in general. 
 
 ## Installation and Configuration
 
@@ -19,7 +19,7 @@ This is done to provide search engine bots with data to crawl and index all Stya
 
 Once you install and configure the module, please open source of the page on which your Styla content is embedded and check if none of the tags mentioned below are duplicated. In case `robots`or `link rel="canonical"` or any other are in the HTML twice, make sure to remove the original ones coming from your default template. Otherwise search engine bots might not be able to crawl all the Styla content or crawl it incorrectly. 
 
-You can find more information on the SEO API on [this page](https://styladocs.atlassian.net/wiki/spaces/CO/pages/9961486/SEO+API+and+Sitemaps+Integration)
+You can find more information on the SEO API on [this page](https://docs.styla.com/seo-integration)
 
 ## Setup Process
 
