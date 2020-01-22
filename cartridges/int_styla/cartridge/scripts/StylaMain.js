@@ -7,8 +7,8 @@
  */
 
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-var Logger = require('dw/system/Logger').getLogger('styla', 'StylaMain');
-var StylaServiceInit = require('./init/StylaServiceInit');
+var Logger = require('dw/system/Logger').getLogger('styla', 'stylaMain');
+var StylaServiceInit = require('./init/stylaServiceInit');
 var Site = require('dw/system/Site');
 
 var CONFIG_CO_TYPE = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations

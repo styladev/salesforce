@@ -7,15 +7,15 @@
  */
 
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-var Logger = require('dw/system/Logger').getLogger('styla', 'StylaMain');
-var StylaServiceInit = require('./init/StylaServiceInit');
+var Logger = require('dw/system/Logger').getLogger('styla', 'stylaMain');
+var StylaServiceInit = require('./init/stylaServiceInit');
 var Site = require('dw/system/Site');
 
 var CONFIG_CO_TYPE = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations
 var CONFIG_CO_KEY_ATTR = 'Key_and_Sort_Order';         // name of the custom object's key attribute
 var CONFIG_CO_SORT_ORRDER = 'custom.' + CONFIG_CO_KEY_ATTR + ' asc'; // sort order of custom objects
 
-var STYLA_ENABLED = Site.current.getCustomPreferenceValue('stylaEnabled') == true;
+var STYLA_ENABLED = Site.getCurrent().getCustomPreferenceValue('stylaEnabled') == true;
 
 
 /**
@@ -217,7 +217,7 @@ function getMagazineConfiguration(path) {
                 }
             }
         }
-        iter.close();
+        // iter.close();
         if (!skipHomepageIter) {
             iter2 = CustomObjectMgr.queryCustomObjects(CONFIG_CO_TYPE, 'custom.enabled = true', CONFIG_CO_SORT_ORRDER, null);
             while (iter2.hasNext()) {
@@ -235,7 +235,7 @@ function getMagazineConfiguration(path) {
                     }
                 }
             }
-            iter2.close();
+            // iter2.close();
         }
     } // path not empty
 
@@ -259,7 +259,6 @@ function getConfigForAlias(path) {
             result = magazineConfig;
         }
     }
-
     return result;
 }
 

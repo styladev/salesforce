@@ -4,9 +4,6 @@
 </iscomment>
 
 
-<iscache type="relative" minute="${pdict.MagazineConfiguration.seoCachingTTL}">
-
-
 <!--- Debug info (not visible on production) --->
 <isif condition="${require('dw/system/System').instanceType !== require('dw/system/System').PRODUCTION_SYSTEM}">
 	<!--- uncomment the following block to debug SEO content --->

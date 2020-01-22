@@ -13,7 +13,8 @@ var server = require('server');
  *
  */
 
-var StylaMain = require('/int_styla_refArch/cartridge/scripts/StylaMain');
+var StylaMain = require('/int_styla_refArch/cartridge/scripts/stylaMain');
+var cache = require('*/cartridge/scripts/middleware/cache');
 
 function renderContent(template, res) {
     var pdict = StylaMain.GetRenderContent();
@@ -24,12 +25,12 @@ function renderContent(template, res) {
     }
 }
 
-server.get('HeaderContent', function (req, res, next) {
+server.get('HeaderContent', cache.applyStylaCustomCache, function (req, res, next) {
     renderContent('styla/headercontent', res);
     return next();
 });
 
-server.get('BodyContent', function (req, res, next) {
+server.get('BodyContent', cache.applyStylaCustomCache, function (req, res, next) {
     renderContent('styla/bodycontent', res);
     return next();
 });

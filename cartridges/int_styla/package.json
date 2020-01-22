@@ -1,6 +1,6 @@
 {
 	"init": [
-		"./cartridge/scripts/init/StylaServiceInit.js"
+		"./cartridge/scripts/init/stylaServiceInit.js"
 	],
 
 	"cartridgeVersion": "19.0.1"

@@ -2,9 +2,9 @@
    <head>
       <link rel="stylesheet" href="./markdown.css"/>
    </head>
-   <body>
+   <p>
       <h1 id="int_styla">int_styla</h1>
-      <h4 id="Version1720">Version 19.0.1</h4>
+      <h4 id="Version1720">Version 20.1.0</h4>
       <h2 id="TableofContents">Table of Contents</h2>
       <ol>
          <li><a href="#Summary">Summary</a></li>
@@ -129,9 +129,10 @@
       <p>For example, the magazine base path cannot contain nested folders like <code>/fashion/magazine</code> when using
          pipelines because a pipeline alias only supports direct folders like <code>/magazine</code>.
       </p>
-      <h3 id="Compatiblity">Compatiblity</h3>
-      <p>The Styla implementation cartridge is available since Commerce Cloud 15.6.</p>
+      <h3 id="Compatibility">Compatibility</h3>
+      <p>The Styla implementation cartridge is available since Commerce Cloud 15.6 and is compatible with all recent versions of Commerce Cloud.</p>
       <p>Site Genesis 16.1 has been used as reference for this installation guide.</p>
+      <p>The cartridge is compatible with any locale requested by the client.</p>
       <p>This cartridge supports both integrating with a storefront based on controllers as well as one that is
          using pipelines.
       </p>
@@ -155,11 +156,10 @@
       </p>
       <p><img src="images/intguide/cartridge_path.png" alt="Styla cartridge path" title="Cartridge Path"></p>
       <h4 id="SitePreferencesandCustomObjects">Site Preferences and Custom Objects</h4>
-      <h5 id="Importmetadatadefinitions">Import metadata definitions</h5>
-      <p>New site preferences and a custom object definition need to be imported into the Commerce Cloud instance.
-         Go to <em>Administration &gt; Site Development &gt; Import &amp; Export</em> and upload the file
-         <code>metadata/styla_magazine_metadata.xml</code>.
-         Then, import it as Meta Data.
+      <h5 id="Importmetadatadefinitions">Import metadata definitions and services</h5>
+      <p>New site preferences, custom object definition and services need to be imported into the Commerce Cloud instance.
+         Go to <em>Administration &gt; Site Development &gt; Site Import & Export &gt; Import Section</em> and upload the file
+         <code>metadata/Global Data.zip</code>. Then, import it.
       </p>
       <h5 id="SitePreferences">Site Preferences</h5>
       <p>When this is finished, go to <em>Merchant Tools &gt; Site Preferences &gt; Custom Site Preferences &gt;
@@ -302,12 +302,9 @@
             </tr>
          </tbody>
       </table>
-      <h4 id="ServiceConfiguration">Service Configuration</h4>
-      <p>Styla loads SEO data into the page using a Web Service, which needs to be configured. The service configurations
-         can be imported like this: Go to <em>Administration &gt; Operations &gt; Import &amp; Export</em>
-         and upload <code>metadata/styla_magazine_services.xml</code>. After successfully importing this file,
-         go to <em>Administration &gt; Operations &gt; Services</em> and check if the configuration is according to the following
-         screen shots. If so, no further adjustments are required.
+      <h4 id="ServiceConfiguration">Service Configuration Check</h4>
+      <p>After successfully importing the file, go to <em>Administration &gt; Operations &gt; Services</em> and check if the configuration is according
+         to the following screen shots. If so, no further adjustments are required.
       </p>
       <p><img src="images/intguide/webservice_service.png" alt="Service" title="Service">
          <img src="images/intguide/webservice_profile.png" alt="Profile" title="Profile">
@@ -391,7 +388,6 @@
       <p><img src="images/intguide/catchall.png" alt="catchall" title="Redirect Catchall"></p>
       <p>You can still get the same behavior if you manually redirect to the target of your catch-all rule.
          For an example see the code comment in the chapter <em>RedirectURL.js</em>.
-         For pipelines see the chapter <em>RedirectURL pipeline</em>.
       </p>
       <h4 id="Categoryrenderingtemplate">Category rendering template</h4>
       <p>When using category URLs you need to specify a rendering template for the category. The cartridge includes
@@ -520,6 +516,36 @@
       <pre><code><span class="hljs-tag">&lt;<span class="hljs-title">isset</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"SkipPageTitleAndMeta"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"${true}"</span> <span class="hljs-attribute">scope</span>=<span class="hljs-value">"page"</span>/&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">isdecorate</span> <span class="hljs-attribute">template</span>=<span class="hljs-value">"content/home/pt_storefront"</span>&gt;</span>
 </code></pre>
+      <h5 id="appjs">footer_UI.isml</h5>
+      <p>If product information and add to cart functionality is used by the Styla magazine, a JavaScript function
+         needs to be exposed that can be called by Styla if a user adds a product to the cart. For SiteGenesis this is achieved
+         by adding the provided <code>cart.min.js</code> path to the shop's <code>footer_UI.isml</code> file. Thus, add the following line to <code>footer_UI.isml</code>
+         (after the inclusion of <code>app.js</code> file):
+      </p>
+      <pre><code><span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/js/cart.min.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;</code></pre>
+      <p>The result should look like this:</p>
+      <pre>
+         <code>
+<script>pageContext = <isprint value="${JSON.stringify(pageContext)}" encoding="off"/>;</script>
+&lt;iscomment&gt;third-party add-ons&lt;/iscomment&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/lib/jquery/jquery.jcarousel.min.js')}"</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/lib/jquery/jquery.validate.min.js')}"</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/lib/jquery/jquery.zoom.min.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;</span><span class="hljs-title">isinclude</span><span class="hljs-attribute"> template</span>=<span class="hljs-value">"resources/appresources"</span><span class="hljs-tag">/&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;</span><span class="hljs-title">isinclude</span><span class="hljs-attribute"> url</span>=<span class="hljs-value">"${URLUtils.url('Resources-LoadTransient')}"</span><span class="hljs-tag">/&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/js/app.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/js/cart.min.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">isif</span><span class="hljs-attribute"> condition</span>=<span class="hljs-value">"${!('pageContext' in this) || empty(pageContext)}"</span><span class="hljs-tag">&gt;</span>
+   &lt;isscript&gt;pageContext = new Object();&lt;/isscript&gt;
+&lt;/isif&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-tag">&gt;</span>pageContext = <span class="hljs-tag">&lt;</span><span class="hljs-title">isprint</span><span class="hljs-attribute"> value</span>=<span class="hljs-value">"${JSON.stringify(pageContext)}"</span><span class="hljs-attribute"> encoding</span>=<span class="hljs-value">"off"</span><span class="hljs-tag">/&gt;</span>;&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-tag">&gt;</span>
+   var meta = "${pdict.CurrentPageMetaData.description}";
+   var keywords = "${pdict.CurrentPageMetaData.keywords}";
+&lt;/script&gt;
+         </code>
+      </pre>
+      <p>The <code>cart.min.js</code> then takes care of exposing and registering the add to cart functionality with Styla.</p>
       <h4 id="URLHandling">URL Handling</h4>
       <h5 id="RedirectURLjs">RedirectURL.js</h5>
       <p>The following step is required if your storefront uses controllers. You can skip this if you are using pipelines.</p>
@@ -583,38 +609,6 @@
          Since the URL in the customer's browser is still <code>magazine/stories/5</code> the Styla JavaScript will load
          the corresponding magazine content.
       </p>
-      <h5 id="RedirectURLpipeline">RedirectURL pipeline</h5>
-      <p>The following step is required if your storefront uses pipelines. You can skip this if you are using controllers.</p>
-      <p>The <code>RedirectURL-Start</code> pipeline needs to be changed: In the error exit edge of the <em>RedirectURL</em> pipelet
-         insert the following:
-      </p>
-      <ul>
-         <li>A <em>call node</em> to <code>StylaMagazine-Alias</code></li>
-         <li>A <em>decision node</em> with <em>Decision Key</em> set to <code>empty(PipelineName)</code></li>
-         <li>A <em>dynamic jump node</em> which reads its target from the variable <code>PipelineName</code></li>
-      </ul>
-      <p>Original pipeline:
-         <img src="images/intguide/redirect_pipeline_1_orig.png" alt="redirect_pipeline_1" title="Redirect pipeline original">
-      </p>
-      <p>Changed pipeline:
-         <img src="images/intguide/redirect_pipeline_2_error_templ.png" alt="redirect_pipeline_2" title="Redirect pipeline modified">
-      </p>
-      <p>If you prefer the error behavior of the <em>catch-all redirect rule</em> then instead of rendering the
-         <code>util/redirecterror</code> template you can use a <em>jump node</em> with target <code>Home-ErrorNotFound</code>:
-      </p>
-      <p><code>Home-ErrorNotFound</code> pipeline instead of <code>redirecterror</code> template:
-         <img src="images/intguide/redirect_pipeline_3_error_call.png" alt="redirect_pipeline_3" title="Redirect pipeline modified">
-      </p>
-      <p>The <code>Redirect-Start</code> pipelines shown above require that the <code>int_styla</code> cartridge is in the cartridge path
-         of all sites which use this <code>Redirect-Start</code> pipeline. If you want to avoid that then you can insert a check
-         for the site preference <code>stylaEnabled</code> before the <code>StylaMagazine-Alias</code> pipeline is called.
-      </p>
-      <p>Check if Styla is enabled before calling the <code>StylaMagazine-Alias</code> pipeline:
-         <img src="images/intguide/redirect_pipeline_4_check_pref.png" alt="redirect_pipeline_4" title="Redirect pipeline with site pref check">
-      </p>
-      <p>See <code>int_styla/cartridge/example/pipelines/RedirectURL.xml</code> for an example, you can copy the
-         pipeline modifications from there.
-      </p>
       <h5 id="SearchModeljs">SearchModel.js</h5>
       <p>The following step is required if your storefront uses controllers. You can skip this if you are using pipelines.</p>
       <p>If using a category URL, the <code>SearchModel.initializeProductSearchModel</code> controller method has to be
@@ -648,7 +642,7 @@
     <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>(cgid)) {
         var category = CatalogMgr.getCategory(cgid);
         if (category &amp;&amp; category.isOnline() &amp;&amp; productSearchModel) {
-            productSearchModel.setCategoryID(category.getID());
+            productSearchModel.setCategoryID(category.ge`tID());
         }
     }
 
@@ -660,49 +654,6 @@
          <code>/int_styla/cartridge/templates/default/rendering/catlanding.isml</code> or create a custom one as described
          in chapter <em>Magazine Inclusion</em>.
       </p>
-      <h5 id="Searchpipeline">Search pipeline</h5>
-      <p>The following step is required if your storefront uses pipelines. You can skip this if you are using controllers.</p>
-      <p>The <code>Search-Show</code> pipeline needs to be changed, specifically modify the <code>CategoryID</code> parameter of the
-         <em>Search</em> pipelet:
-      </p>
-      <p>Old value:</p>
-      <pre><code>CurrentHttpParameterMap<span class="hljs-class">.cgid</span><span class="hljs-class">.value</span>
-</code></pre>
-      <p>New value:</p>
-      <pre><code>CurrentHttpParameterMap.cgid.<span class="hljs-built_in">value</span> || (<span class="hljs-string">'MagazineConfiguration'</span> <span class="hljs-operator">in</span> CurrentRequest.custom &amp;&amp; !<span class="hljs-constant">empty</span>(CurrentRequest.custom.MagazineConfiguration) ? CurrentRequest.custom.MagazineConfiguration.categoryID : <span class="hljs-constant">null</span>)
-</code></pre>
-      <p><code>Search-Show</code> pipeline:
-         <img src="images/intguide/search_pipeline_1.png" alt="search_pipeline_1" title="Search pipeline">
-      </p>
-      <p>What this change does: If the redirect handler has determined that the current request's URL matches a magazine
-         configuration, and if that configuration pointed to the <code>Search-Show</code> pipeline, then this change will cause the
-         <em>Search</em> pipelet to use the category ID which is specified in the magazine configuration.
-      </p>
-      <h4 id="JavaScriptActions">JavaScript Actions</h4>
-      <h5 id="appjs">app.js</h5>
-      <p>If product information and add to cart functionality is used by the Styla magazine, a JavaScript function
-         needs to be exposed that can be called by Styla if a user adds a product to the cart. This is achieved
-         by adding the provided <code>cart.js</code> to the shop's <code>app.js</code> file. Thus, add the following line to <code>app.js</code>
-         (somewhere near the top, after <code>minicart</code> has been defined):
-      </p>
-      <pre><code>require<span class="hljs-list">('../../../int_styla/cartridge/js/styla/cart.js')</span><span class="hljs-list">(<span class="hljs-keyword">minicart</span>)</span><span class="hljs-comment">;</span>
-</code></pre>
-      <p>The result should look like this:</p>
-      <pre><code><span class="hljs-keyword">var</span> countries = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./countries'</span>),
-    dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dialog'</span>),
-    minicart = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./minicart'</span>),
-    page = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./page'</span>),
-    rating = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./rating'</span>),
-    searchplaceholder = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./searchplaceholder'</span>),
-    searchsuggest = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./searchsuggest'</span>),
-    searchsuggestbeta = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./searchsuggest-beta'</span>),
-    tooltip = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./tooltip'</span>),
-    util = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./util'</span>),
-    validator = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./validator'</span>);
-
-<span class="hljs-built_in">require</span>(<span class="hljs-string">'../../../int_styla/cartridge/js/styla/cart.js'</span>)(minicart);
-</code></pre>
-      <p>The <code>cart.js</code> then takes care of exposing and registering the add to cart functionality with Styla.</p>
       <h4 id="EstimatedEffort">Estimated Effort</h4>
       <p>The estimated effort to make the necessary changes to the shop cartridge is 8-12 hours, depending on
          the features being used (Styla SEO, add to cart feature, multiple magazines, etc.).
@@ -858,11 +809,10 @@
       </p>
       <p><img src="images/intguide/cartridge_pathsfra.png" alt="Styla cartridge path" title="Cartridge Path"></p>
       <h4 id="SitePreferencesandCustomObjects">Site Preferences and Custom Objects</h4>
-      <h5 id="Importmetadatadefinitions">Import metadata definitions</h5>
-      <p>New site preferences and a custom object definition need to be imported into the Commerce Cloud instance.
-         Go to <em>Administration &gt; Site Development &gt; Import &amp; Export</em> and upload the file
-         <code>metadata/styla_magazine_metadata.xml</code>.
-         Then, import it as Meta Data.
+      <h5 id="Importmetadatadefinitions">Import metadata definitions and services</h5>
+      <p>New site preferences, custom object definition and services need to be imported into the Commerce Cloud instance.
+         Go to <em>Administration &gt; Site Development &gt; Site Import & Export &gt; Import Section</em> and upload the file
+         <code>metadata/Global Data.zip</code>. Then, import it.
       </p>
       <h5 id="SitePreferences">Site Preferences</h5>
       <p>When this is finished, go to <em>Merchant Tools &gt; Site Preferences &gt; Custom Site Preferences &gt;
@@ -1005,12 +955,9 @@
             </tr>
          </tbody>
       </table>
-      <h4 id="ServiceConfiguration">Service Configuration</h4>
-      <p>Styla loads SEO data into the page using a Web Service, which needs to be configured. The service configurations
-         can be imported like this: Go to <em>Administration &gt; Operations &gt; Import &amp; Export</em>
-         and upload <code>metadata/styla_magazine_services.xml</code>. After successfully importing this file,
-         go to <em>Administration &gt; Operations &gt; Services</em> and check if the configuration is according to the following
-         screen shots. If so, no further adjustments are required.
+      <h4 id="ServiceConfiguration">Service Configuration Check</h4>
+      <p>After successfully importing the file, go to <em>Administration &gt; Operations &gt; Services</em> and check if the configuration is according
+         to the following screen shots. If so, no further adjustments are required.
       </p>
       <p><img src="images/intguide/webservice_service.png" alt="Service" title="Service">
          <img src="images/intguide/webservice_profile.png" alt="Profile" title="Profile">
@@ -1094,7 +1041,6 @@
       <p><img src="images/intguide/catchall.png" alt="catchall" title="Redirect Catchall"></p>
       <p>You can still get the same behavior if you manually redirect to the target of your catch-all rule.
          For an example see the code comment in the chapter <em>RedirectURL.js</em>.
-         For pipelines see the chapter <em>RedirectURL pipeline</em>.
       </p>
       <h4 id="Categoryrenderingtemplate">Category rendering template</h4>
       <p>When using category URLs you need to specify a rendering template for the category. The cartridge includes
@@ -1224,153 +1170,22 @@
       <pre><code><span class="hljs-tag">&lt;<span class="hljs-title">isset</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"SkipPageTitleAndMeta"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">"${true}"</span> <span class="hljs-attribute">scope</span>=<span class="hljs-value">"page"</span>/&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-title">isdecorate</span> <span class="hljs-attribute">template</span>=<span class="hljs-value">"content/home/pt_storefront"</span>&gt;</span>
 </code></pre>
-      <h4 id="URLHandling">URL Handling</h4>
-      <h5 id="RedirectURLjs">RedirectURL.js</h5>
-      <p>The following step is required if your storefront uses controllers. You can skip this if you are using pipelines.</p>
-      <p>In <code>RedirectURL.js</code> the <code>start()</code> function needs to look like this</p>
-
-      <pre><code>
-
-server.get('Start', function (req, res, next) {
-    var URLRedirectMgr = require('dw/web/URLRedirectMgr');
-
-    var redirect = URLRedirectMgr.redirect;
-    var location = redirect ? redirect.location : null;
-    var redirectStatus = redirect ? redirect.getStatus() : null;
-
-    if (!location) {
-        var StylaMain,
-            path = URLRedirectMgr.redirectOrigin,
-            handledByStyla = false;
-        if (dw.system.Site.current.getCustomPreferenceValue('stylaEnabled') == true) {
-            StylaMain = require('/int_styla_refArch/cartridge/scripts/StylaMain');
-            return StylaMain.Alias(path);
-        }
-        if (!handledByStyla) {
-            res.setStatusCode(404);
-            res.render('error/notFound');
-        }
-    } else {
-        if (redirectStatus) {
-            res.setRedirectStatus(redirectStatus);
-        }
-        res.redirect(location);
-    }
-
-    next();
-});
-</code></pre>
-      <p>Before the change if no matching URL rule was found then the <code>redirecterror</code> template was rendered.
-         Now if no matching rule is found then <code>StylaMagazine.Alias()</code> is called. If that method finds a magazine
-         configuration object where the <em>Magazine Base Path</em> matches <code>redirectOrigin</code> then it will
-         call the controller specified in the magazine configuration; if no matching magazine configuration is
-         found, then the <code>redirecterror</code> template is rendered.
-      </p>
-      <p>E.g. assume we have a pipeline alias <code>magazine</code> assigned to <code>Home-Show</code> which renders a Styla magazine.
-         When interacting with the magazine the Styla JavaScript will modify the URL in the
-         customer's browser to e.g. <code>magazine/stories/5</code>.
-         If a customer navigates to this URL then <code>RedirectUrl.start()</code> doesn't find a matching rule for
-         <code>magazine/stories/5</code> and so it calls <code>StylaMagazine.Alias()</code>.
-         If there is a magazine configuration in site preferences with <em>Magazine Base Path</em> <code>magazine</code> and
-         <em>Magazine Controller Method</em> set to <code>app_storefront_controllers-Home-Show</code> then <code>StylaMagazine.Alias()</code>
-         will execute the <code>Home.Show()</code> controller method and return <code>true</code>.
-         Since the URL in the customer's browser is still <code>magazine/stories/5</code> the Styla JavaScript will load
-         the corresponding magazine content.
-      </p>
-
-      <h5 id="searchHelpers">SearchHelpers.js</h5>
-      <p>If using a category URL, the <code>searchHelpers.setupSearch</code> and <code>searchHelpers.search</code> methods have to be
-         modified. When <code>StylaMagazine.Alias()</code> (see previous section) finds a matching magazine configuration
-         it will store the <em>Magazine Category ID</em> from the configuration in <code>request.custom.MagazineCategoryId</code>.
-         The following change allows the search model to read the category ID from <code>request.custom.MagazineCategoryId</code>
-         if <code>httpParameterMap.cgid</code> is not submitted.
-      </p>
-      <p>
-         For <b>UNIT TESTING</b> replace searchHelpers.js from the Documentation folder with test/unit/app_storefront_base/scripts/helpers/searchHelpers.js
-      </p>
-      <p>Change the setupSearch method to look like this
-      <pre><code>
-
-function setupSearch(apiProductSearch, params) {
-    var CatalogMgr = require('dw/catalog/CatalogMgr');
-    var searchModelHelper = require('*/cartridge/scripts/search/search');
-
-    var cgid = null;
-    if (params.cgid) {
-        cgid = params.cgid;
-    } else if ('MagazineConfiguration' in request.custom && request.custom.MagazineConfiguration
-     && request.custom.MagazineConfiguration.categoryID) {
-        // found category ID stored by StylaMagazine.alias()
-        cgid = request.custom.MagazineConfiguration.categoryID;
-    }
-    if (cgid) {
-        var sortingRule = params.srule ? CatalogMgr.getSortingRule(params.srule) : null;
-        var selectedCategory = CatalogMgr.getCategory(cgid);
-        selectedCategory = selectedCategory && selectedCategory.online ? selectedCategory : null;
-
-        searchModelHelper.setProductProperties(apiProductSearch, params, selectedCategory, sortingRule);
-
-        if (params.preferences) {
-            searchModelHelper.addRefinementValues(apiProductSearch, params.preferences);
-        }
-    }
-
-    return apiProductSearch;
-}
-
-</code></pre>
-<p>Add in the search method before returning the result the following
-      <pre><code>
-
-    if ('MagazineConfiguration' in request.custom && request.custom.MagazineConfiguration
-     && request.custom.MagazineConfiguration.categoryID) {
-        result.category = apiProductSearch.category;
-        result.categoryTemplate = categoryTemplate;
-    }
-
-</code></pre>
-      <p>The value of the category ID needs to be set in the magazine configuration's custom object attribute
-         <em>categoryID</em>. Apart from that,
-         use the category rendering template provided in this cartridge
-         <code>/int_styla_refArch/cartridge/templates/default/rendering/catlanding.isml</code> or create a custom one as described
-         in chapter <em>Magazine Inclusion</em>.
-      </p>
-
-      <h4 id="JavaScriptActions">JavaScript Actions</h4>
-      <h5 id="appjs">main.js</h5>
+      <h5 id="appjs">scripts.isml</h5>
       <p>If product information and add to cart functionality is used by the Styla magazine, a JavaScript function
          needs to be exposed that can be called by Styla if a user adds a product to the cart. This is achieved
-         by adding the provided <code>cart.js</code> to the shop's <code>app.js</code> file. Thus, add the following line to <code>app.js</code>
-         (somewhere near the top, after <code>minicart</code> has been defined):
+         by adding the provided <code>cart.min.js</code> path to the shop's <code>scripts.isml</code> file. Thus, add the following line to <code>scripts.isml</code>
+         (after the inclusion of <code>main.js</code> file):
       </p>
-      <pre><code>
-      	require('../../../../../int_styla_refArch/cartridge/js/styla/cart.js')();
-
-</code></pre>
       <p>The result should look like this:</p>
       <pre><code>
-window.jQuery = window.$ = require('jquery');
-var processInclude = require('./util');
-
-$(document).ready(function () {
-    processInclude(require('./components/menu'));
-    processInclude(require('./components/cookie'));
-    processInclude(require('./components/consentTracking'));
-    processInclude(require('./components/footer'));
-    processInclude(require('./components/miniCart'));
-    processInclude(require('./components/collapsibleItem'));
-    processInclude(require('./components/search'));
-    processInclude(require('./components/clientSideValidation'));
-    processInclude(require('./components/countrySelector'));
-    processInclude(require('./components/toolTip'));
-});
-
-require('../../../../../int_styla_refArch/cartridge/js/styla/cart.js')();
-require('./thirdParty/bootstrap');
-require('./components/spinner');
-
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span>&gt;//common/scripts.isml&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/js/app.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/js/cart.min.js')}"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">isloop</span><span class="hljs-attribute"> items</span>=<span class="hljs-value">"${ require('*/cartridge/scripts/assets.js').scripts }"</span><span class="hljs-attribute"> var</span>=<span class="hljs-value">"script"</span><span class="hljs-tag">&gt;</span>
+   &lt;script defer type="text/javascript" src="${script}"&gt;&lt;/script&gt;
+&lt;/isloop&gt;
 </code></pre>
-      <p>The <code>cart.js</code> then takes care of exposing and registering the add to cart functionality with Styla.</p>
+      <p>The <code>cart.min.js</code> then takes care of exposing and registering the add to cart functionality with Styla.</p>
       <h4 id="EstimatedEffort">Estimated Effort</h4>
       <p>The estimated effort to make the necessary changes to the shop cartridge is 8-12 hours, depending on
          the features being used (Styla SEO, add to cart feature, multiple magazines, etc.).

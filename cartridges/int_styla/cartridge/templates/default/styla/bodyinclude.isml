@@ -7,10 +7,10 @@
 <isif condition="${dw.system.Site.current.getCustomPreferenceValue('stylaEnabled') == true}">
 
 	<isscript>
-		var StylaMain = require('/int_styla/cartridge/scripts/StylaMain');
+		var StylaMain = require('/int_styla/cartridge/scripts/stylaMain');
 		StylaMain.SetHttpStatus();
 	</isscript>
-	 
+
 	<isinclude url="${URLUtils.url('StylaMagazine-BodyContent', 'magazinepath', request.httpHeaders['x-is-path_info'], 'querystring', request.httpQueryString)}"/>
 
 </isif>

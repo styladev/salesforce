@@ -2,7 +2,7 @@
 
 
 var LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
-var System = require('dw/system/System');
+// var System = require('dw/system/System');
 
 /**
 	* Service used for fetching SEO content for a specific URL.
@@ -43,6 +43,10 @@ module.exports.StylaSeoContentHttpService = LocalServiceRegistry.createService('
                 body: ''
             }
         };
+    },
+
+    filterLogMessage: function (msg) {
+        return msg;
     }
 });
 
@@ -84,6 +88,10 @@ module.exports.StylaVersionService = LocalServiceRegistry.createService('StylaVe
             error: false,
             version: 'x'
         };
+    },
+
+    filterLogMessage: function (msg) {
+        return msg;
     }
 });
 

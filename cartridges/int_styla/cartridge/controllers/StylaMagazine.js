@@ -4,18 +4,18 @@
  * Controller exposes methods for injecting Styla JavaScript and SEO content.
  *
  * @module controllers/StylaMagazine
- * 
- * 
+ *
+ *
  * Do not reference the storefront controller cartridge here (e.g to re-use 'app' or 'guard'):
  * This montroller module is also called via remote include even when the storefront uses pipelines.
  * IOW: the storefront controller cartridge may or may not exist when this controller executes.
- * 
+ *
  */
 
 var Logger = require('dw/system/Logger').getLogger('styla', 'StylaMagazine');
 var ISML = require('dw/template/ISML');
 
-var StylaMain = require('/int_styla/cartridge/scripts/StylaMain');
+var StylaMain = require('/int_styla/cartridge/scripts/stylaMain');
 
 
 const CONFIG_CO_TYPE        = 'StylaMagazineConfiguration'; // custom object type for storing magazine configurations
@@ -31,7 +31,7 @@ function renderContent(template) {
 	}
 	else {
 		ISML.renderTemplate('styla/empty');
-	}	
+	}
 }
 
 
@@ -55,41 +55,41 @@ function bodyContent() {
  * Render the Styla cartridge version.
  */
 function cartridgeVersion() {
-	
+
 	var versionInfo = {
 		    version: require('~/package.json').cartridgeVersion
 		},
 		str;
 
 	str = JSON.stringify(versionInfo, null, '\t');
-	
+
 	response.setContentType('application/json');
 	response.setExpires(5 * 60 * 1000); // 5 minutes
-	response.writer.print(str);	
+	response.writer.print(str);
 }
 
 
 /**
- * If the current URL is part of a magazine, then jump to the corresponding 
+ * If the current URL is part of a magazine, then jump to the corresponding
  * controller method so that the original URL is preserved in the browser.
- * 
+ *
  * This is called from RedirectURL.start() if no matching redirect rule was found.
- * 
+ *
  * E.g. assume we have an alias 'magazine' assigned to a pipeline which renders a Styla magazine.
- * When interacting with the magazine the Styla JavaScript will modify the URL in the 
+ * When interacting with the magazine the Styla JavaScript will modify the URL in the
  * customer's browser to e.g. 'magazine/stories/5'.
- * Because RedirectUrl.start() doesn't find a matching rule for 'magazine/stories/5' 
- * it calls this function.    
- * 
+ * Because RedirectUrl.start() doesn't find a matching rule for 'magazine/stories/5'
+ * it calls this function.
+ *
  * @param path Original URL before redirect.
- * @returns True, if a matching magazine configuration was found and the configured 
+ * @returns True, if a matching magazine configuration was found and the configured
  * controller method was called successfully.
  */
 function alias(path) {
 	var result = false,
 		magazineConfig = StylaMain.GetConfigForAlias(path),
 		parts;
-	
+
 	if (magazineConfig) {
 		// read controller method method from configuration
 		parts = magazineConfig.pipeline.split('-');
@@ -127,7 +127,7 @@ function alias(path) {
 		Logger.debug('no matching config found for path: ' + path);
 	}
 
-	
+
 	return result;
 }
 

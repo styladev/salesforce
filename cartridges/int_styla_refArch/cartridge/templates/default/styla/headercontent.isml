@@ -5,10 +5,7 @@
 </iscomment>
 
 
-<iscache type="relative" minute="${pdict.MagazineConfiguration.seoCachingTTL}">
-
-
-<!--- Styla JavaScript library ---> 
+<!--- Styla JavaScript library --->
 <script src="${pdict.MagazineConfiguration.jsLibUrl}"></script>
 
 
