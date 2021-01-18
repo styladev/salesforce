@@ -18,6 +18,6 @@
 
 <!--- Styla SEO content for header --->
 <isif condition="${!pdict.MagazineConfiguration.seoDisabled}">
-	<isprint value="${pdict.SeoResponse.html.head}" encoding="off"/>
+	<isprint value="${pdict.SeoResponse.html.head}" encoding="htmlcontent"/>
 </isif>
 

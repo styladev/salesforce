@@ -475,7 +475,7 @@
       <pre><code>&lt;isif condition=<span class="hljs-string">"${dw.system.System.getInstanceType() != dw.system.System.PRODUCTION_SYSTEM}"</span>&gt;
     &lt;title&gt;${pdict.CurrentPageMetaData.title} | ${Resource.msg(<span class="hljs-string">'global.site.name'</span>, <span class="hljs-string">'locale'</span>, null)} | ${Resource.msg(<span class="hljs-string">'revisioninfo.revisionnumber'</span>, <span class="hljs-string">'revisioninfo'</span>, null)}&lt;/title&gt;
 &lt;iselse/&gt;
-  &lt;title&gt;&lt;isprint <span class="hljs-keyword">value</span>=<span class="hljs-string">"${pdict.CurrentPageMetaData.title}"</span> <span class="hljs-keyword">encoding</span>=<span class="hljs-string">"off"</span> /&gt;&lt;/title&gt;
+  &lt;title&gt;&lt;isprint <span class="hljs-keyword">value</span>=<span class="hljs-string">"${pdict.CurrentPageMetaData.title}"</span> <span class="hljs-keyword">encoding</span>=<span class="hljs-string">"htmlcontent"</span> /&gt;&lt;/title&gt;
 &lt;/isif&gt;
 </code></pre>
       <p>with this (surround the existing code with an additional ISIF statement):</p>
@@ -483,7 +483,7 @@
 &lt;isif condition=<span class="hljs-string">"<span class="hljs-subst">${dw.system.System.getInstanceType() != dw.system.System.PRODUCTION_SYSTEM}</span>"</span>&gt;
     &lt;title&gt;${pdict.CurrentPageMetaData.title} | ${Resource.msg(<span class="hljs-string">'global.site.name'</span>, <span class="hljs-string">'locale'</span>, <span class="hljs-keyword">null</span>)} | ${Resource.msg(<span class="hljs-string">'revisioninfo.revisionnumber'</span>, <span class="hljs-string">'revisioninfo'</span>, <span class="hljs-keyword">null</span>)}&lt;/title&gt;
 &lt;iselse/&gt;
-  &lt;title&gt;&lt;isprint value=<span class="hljs-string">"<span class="hljs-subst">${pdict.CurrentPageMetaData.title}</span>"</span> encoding=<span class="hljs-string">"off"</span> /&gt;&lt;/title&gt;
+  &lt;title&gt;&lt;isprint value=<span class="hljs-string">"<span class="hljs-subst">${pdict.CurrentPageMetaData.title}</span>"</span> encoding=<span class="hljs-string">"htmlcontent"</span> /&gt;&lt;/title&gt;
 &lt;/isif&gt;
 &lt;/isif&gt;
 </code></pre>
@@ -526,7 +526,7 @@
       <p>The result should look like this:</p>
       <pre>
          <code>
-<script>pageContext = <isprint value="${JSON.stringify(pageContext)}" encoding="off"/>;</script>
+<script>pageContext = <isprint value="${JSON.stringify(pageContext)}" encoding="htmlcontent"/>;</script>
 &lt;iscomment&gt;third-party add-ons&lt;/iscomment&gt;
 <span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/lib/jquery/jquery.jcarousel.min.js')}"</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
 <span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-attribute"> src</span>=<span class="hljs-value">"${URLUtils.staticURL('/lib/jquery/jquery.validate.min.js')}"</span><span class="hljs-attribute"> type</span>=<span class="hljs-value">"text/javascript"</span><span class="hljs-tag">&gt;</span>&lt;/script&gt;
@@ -538,7 +538,7 @@
 <span class="hljs-tag">&lt;</span><span class="hljs-title">isif</span><span class="hljs-attribute"> condition</span>=<span class="hljs-value">"${!('pageContext' in this) || empty(pageContext)}"</span><span class="hljs-tag">&gt;</span>
    &lt;isscript&gt;pageContext = new Object();&lt;/isscript&gt;
 &lt;/isif&gt;
-<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-tag">&gt;</span>pageContext = <span class="hljs-tag">&lt;</span><span class="hljs-title">isprint</span><span class="hljs-attribute"> value</span>=<span class="hljs-value">"${JSON.stringify(pageContext)}"</span><span class="hljs-attribute"> encoding</span>=<span class="hljs-value">"off"</span><span class="hljs-tag">/&gt;</span>;&lt;/script&gt;
+<span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-tag">&gt;</span>pageContext = <span class="hljs-tag">&lt;</span><span class="hljs-title">isprint</span><span class="hljs-attribute"> value</span>=<span class="hljs-value">"${JSON.stringify(pageContext)}"</span><span class="hljs-attribute"> encoding</span>=<span class="hljs-value">"htmlcontent"</span><span class="hljs-tag">/&gt;</span>;&lt;/script&gt;
 <span class="hljs-tag">&lt;</span><span class="hljs-title">script</span><span class="hljs-tag">&gt;</span>
    var meta = "${pdict.CurrentPageMetaData.description}";
    var keywords = "${pdict.CurrentPageMetaData.keywords}";
@@ -1129,7 +1129,7 @@
       <pre><code>&lt;isif condition=<span class="hljs-string">"${dw.system.System.getInstanceType() != dw.system.System.PRODUCTION_SYSTEM}"</span>&gt;
     &lt;title&gt;${pdict.CurrentPageMetaData.title} | ${Resource.msg(<span class="hljs-string">'global.site.name'</span>, <span class="hljs-string">'locale'</span>, null)} | ${Resource.msg(<span class="hljs-string">'revisioninfo.revisionnumber'</span>, <span class="hljs-string">'revisioninfo'</span>, null)}&lt;/title&gt;
 &lt;iselse/&gt;
-  &lt;title&gt;&lt;isprint <span class="hljs-keyword">value</span>=<span class="hljs-string">"${pdict.CurrentPageMetaData.title}"</span> <span class="hljs-keyword">encoding</span>=<span class="hljs-string">"off"</span> /&gt;&lt;/title&gt;
+  &lt;title&gt;&lt;isprint <span class="hljs-keyword">value</span>=<span class="hljs-string">"${pdict.CurrentPageMetaData.title}"</span> <span class="hljs-keyword">encoding</span>=<span class="hljs-string">"htmlcontent"</span> /&gt;&lt;/title&gt;
 &lt;/isif&gt;
 </code></pre>
       <p>with this (surround the existing code with an additional ISIF statement):</p>
@@ -1137,7 +1137,7 @@
 &lt;isif condition=<span class="hljs-string">"<span class="hljs-subst">${dw.system.System.getInstanceType() != dw.system.System.PRODUCTION_SYSTEM}</span>"</span>&gt;
     &lt;title&gt;${pdict.CurrentPageMetaData.title} | ${Resource.msg(<span class="hljs-string">'global.site.name'</span>, <span class="hljs-string">'locale'</span>, <span class="hljs-keyword">null</span>)} | ${Resource.msg(<span class="hljs-string">'revisioninfo.revisionnumber'</span>, <span class="hljs-string">'revisioninfo'</span>, <span class="hljs-keyword">null</span>)}&lt;/title&gt;
 &lt;iselse/&gt;
-  &lt;title&gt;&lt;isprint value=<span class="hljs-string">"<span class="hljs-subst">${pdict.CurrentPageMetaData.title}</span>"</span> encoding=<span class="hljs-string">"off"</span> /&gt;&lt;/title&gt;
+  &lt;title&gt;&lt;isprint value=<span class="hljs-string">"<span class="hljs-subst">${pdict.CurrentPageMetaData.title}</span>"</span> encoding=<span class="hljs-string">"htmlcontent"</span> /&gt;&lt;/title&gt;
 &lt;/isif&gt;
 &lt;/isif&gt;
 </code></pre>

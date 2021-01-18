@@ -11,7 +11,7 @@
 		<div id="debug-styla-magazine-cfg" style="display: none;">
 		<!--
 		// debug info (not visible on production):
-		pdict.MagazineConfiguration = <isprint value="${JSON.stringify(pdict.MagazineConfiguration, null, '\t')}" encoding="off" />;
+		pdict.MagazineConfiguration = <isprint value="${JSON.stringify(pdict.MagazineConfiguration, null, '\t')}" encoding="htmlcontent" />;
 		-->
 		</div>
 		<script>
@@ -29,6 +29,6 @@
 >
     <isif condition="${!pdict.MagazineConfiguration.seoDisabled}">
         <!--- Styla SEO content for body --->
-        <isprint value="${pdict.SeoResponse.html.body}" encoding="off"/>
+        <isprint value="${pdict.SeoResponse.html.body}" encoding="htmlcontent"/>
     </isif>
 </div>
